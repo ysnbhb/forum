@@ -12,7 +12,7 @@
 <body>
   <div class="contenr">
     <div class="div-sing">
-      User Sing Up 
+      User Sing Up
     </div>
     <div class="min-contenr">
 
@@ -22,20 +22,20 @@
             <div>
               <label class="lable-clase">user name</label>
             </div>
-            <input type="text" placeholder="user name" class="input-clas" />
+            <input type="text" placeholder="user name" class="input-clas" id="user_name" />
           </div>
           <div class="input-div">
             <div>
               <label class="lable-clase">email</label>
             </div>
-            <input type="email" placeholder="email" class="input-clas" />
+            <input type="email" placeholder="email" class="input-clas" id="email" required />
           </div>
           <div class="input-div">
             <div class="lable-clase">
               <label>password</label>
             </div>
 
-            <input type="password" placeholder="password" id="password" class="input-clas"  />
+            <input type="password" placeholder="password" id="password" class="input-clas" />
             <span class=" icon-style material-symbols-outlined" id="changTYpe">
               visibility
             </span>
@@ -51,13 +51,14 @@
             </span>
           </div>
           <div class="buttom-div">
-            <button class="button-singup" id="sing-up"> Sing Up  </button>
+            <button class="button-singup" id="sing-up"> Sing Up </button>
           </div>
         </div>
       </form>
     </div>
   </div>
   <script src="../js/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/validator@13.9.0/validator.min.js"></script>
 </body>
 
 </html>

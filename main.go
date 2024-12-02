@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"forum/database"
+	"forum/server"
 )
 
 func main() {
@@ -14,7 +15,8 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	http.HandleFunc("/home", DB.SingUp)
-	http.HandleFunc("/check", DB.CheckEXist)
+	http.HandleFunc("/", server.PageSingUp)
+	http.HandleFunc("/user/singup", DB.SingUp)
+	http.HandleFunc("/user/check", DB.CheckEXist)
 	http.ListenAndServe(":8081", nil)
 }
