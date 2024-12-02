@@ -14,6 +14,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	http.HandleFunc("/home", DB.LogUp)
+	http.HandleFunc("/home", DB.SingUp)
+	http.HandleFunc("/check", DB.CheckEXist)
 	http.ListenAndServe(":8081", nil)
 }
