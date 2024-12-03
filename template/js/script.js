@@ -46,16 +46,16 @@ function runButton(idButton) {
 
     // Validation logic
     if (
-      Checkvalid() || 
-      !CheckExists("user_name", "user_lable", label, userName.value) || 
-      !CheckExists("email", "email_lable", label, email.value) 
+      Checkvalid() &&
+      !CheckExists("user_name", "user_lable", label, userName.value) &&
+      !CheckExists("email", "email_lable", label, email.value)
     ) {
       console.error("Validation failed.");
       return;
     }
 
     // Make the POST request
-    fetch("/user/signup", {
+    fetch("/user/singup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -89,6 +89,7 @@ function useDebount(idInput, idlable) {
 function CheckExists(idInput, idlable, div, value) {
   div.innerHTML = "";
   if (value === "") {
+    console.log(30);
     return false;
   }
   const lable = document.getElementById(idlable);
@@ -109,10 +110,11 @@ function CheckExists(idInput, idlable, div, value) {
   }).then((resp) => {
     if (resp.ok) {
       div.innerHTML = "";
+      console.log(0);
       return true;
     } else {
+      console.log(100);
       if (idInput === "email") {
-        console.log(100);
         div.innerHTML = "email is ready used try anther email";
       } else {
         div.innerHTML = "user name is ready used try anther email";
