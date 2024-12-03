@@ -34,28 +34,92 @@ function confermetPas() {
   }
 }
 
-function runButtom(idButtom) {
-  const buttom = document.getElementById(idButtom);
-  buttom.addEventListener("click", (env) => {
-    env.preventDefault();
-    if (Checkvalid()) {
+function runButton(idButton) {
+  const button = document.getElementById(idButton);
+  const userName = document.getElementById("user_name");
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+  const label = document.createElement("label");
+
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    // Validation logic
+    if (
+      Checkvalid() || 
+      !CheckExists("user_name", "user_lable", label, userName.value) || 
+      !CheckExists("email", "email_lable", label, email.value) 
+    ) {
+      console.error("Validation failed.");
       return;
-    } else {
     }
+
+    // Make the POST request
+    fetch("/user/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        user_name: userName.value,
+        passwd: password.value,
+        email: email.value,
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("Signup successful");
+        } else {
+          console.error("Signup failed:", res.statusText);
+        }
+      })
+      .catch((error) => {
+        console.error("Network error:", error);
+      });
   });
 }
 
-function CheckExicest(idInput) {
+function useDebount(idInput, idlable) {
   const input = document.getElementById(idInput);
+  const div = document.createElement("label");
   const debounc = debounce(() => {
-    if (validator.isEmail(input.value)) {
-      console.log("valid");
-    } else {
-      console.log("not valid");
-    }
-    console.log(input.value);
+    CheckExists(idInput, idlable, div, input.value);
   }, 1000);
   input.addEventListener("input", debounc);
+}
+
+function CheckExists(idInput, idlable, div, value) {
+  div.innerHTML = "";
+  if (value === "") {
+    return false;
+  }
+  const lable = document.getElementById(idlable);
+  div.style.color = "red";
+  div.style.fontSize = "10px";
+  div.style.marginLeft = "5px";
+  lable.append(div);
+  if (idInput === "email") {
+    if (!validator.isEmail(value) && value !== "") {
+      div.innerHTML = "invalid email";
+      return false;
+    } else {
+      div.innerHTML = "";
+    }
+  }
+  fetch(`/user/check?checker=${value}`, {
+    method: "POST",
+  }).then((resp) => {
+    if (resp.ok) {
+      div.innerHTML = "";
+      return true;
+    } else {
+      if (idInput === "email") {
+        console.log(100);
+        div.innerHTML = "email is ready used try anther email";
+      } else {
+        div.innerHTML = "user name is ready used try anther email";
+      }
+      return false;
+    }
+  });
 }
 
 function debounce(func, wait) {
@@ -68,14 +132,21 @@ function debounce(func, wait) {
   };
 }
 
-CheckExicest("user_name");
-CheckExicest("email");
+useDebount("user_name", "user_lable");
+useDebount("email", "email_lable");
 
 function Checkvalid() {
   const password = document.getElementById("password");
   const confpassword = document.getElementById("confpassword");
+  const user_name = document.getElementById("user_name");
+  const email = document.getElementById("email");
   const buttom = document.getElementById("sing-up");
-  if (password.value === "" || confpassword.value !== password.value) {
+  if (
+    password.value === "" ||
+    confpassword.value !== password.value ||
+    user_name.value === "" ||
+    !validator.isEmail(email.value)
+  ) {
     buttom.style.cursor = "not-allowed";
     return true;
   } else {
@@ -89,4 +160,4 @@ confermetPas();
 showPss("changTYpe", "password");
 showPss("changContype", "confpassword");
 
-runButtom("sing-up");
+runButton("sing-up");

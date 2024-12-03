@@ -16,7 +16,9 @@ func main() {
 		return
 	}
 	http.HandleFunc("/", server.PageSingUp)
+	http.HandleFunc("/js/", server.Server)
+	http.HandleFunc("/style/", server.Server)
 	http.HandleFunc("/user/singup", DB.SingUp)
 	http.HandleFunc("/user/check", DB.CheckEXist)
-	http.ListenAndServe(":8081", nil)
+	http.ListenAndServe(":8080", nil)
 }

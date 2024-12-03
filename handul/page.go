@@ -16,6 +16,7 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 	}
 	user := User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
+	fmt.Println(user)
 	w.Header().Set("Content-type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -39,16 +40,17 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (db *Date) CheckEXist(w http.ResponseWriter, r *http.Request) {
-	user_name := r.FormValue("user_name")
-	fmt.Println(user_name)
-	email := r.FormValue("email")
+	if r.Method != http.MethodPost {
+		return
+	}
+	checker := r.FormValue("checker")
 	exist := false
 	err := db.DB.QueryRow(`
 		SELECT EXISTS(
 			SELECT 1 
 			FROM user
 			WHERE user_name = ? OR email = ?
-		)`, user_name, email).Scan(&exist)
+		)`, checker, checker).Scan(&exist)
 	fmt.Println(exist, err)
 	if err != nil || !exist {
 		w.WriteHeader(200)
