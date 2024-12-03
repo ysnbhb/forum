@@ -15,7 +15,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	http.HandleFunc("/", server.PageSingUp)
+	http.HandleFunc("/singup", server.PageSingUp)
 	http.HandleFunc("/js/", server.Server)
 	http.HandleFunc("/style/", server.Server)
 	http.HandleFunc("/user/singup", DB.SingUp)

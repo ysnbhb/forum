@@ -26,17 +26,17 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "invalid input for logup"})
 		return
-	} else {
-		err = db.Insert(user)
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(map[string]string{"error": "email or user name already exists"})
-			return
-		}
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{"status": "user insert into database"})
-
 	}
+
+	err = db.Insert(user)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "email or user name already exists"})
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"status": "user insert into database"})
+
 }
 
 func (db *Date) CheckEXist(w http.ResponseWriter, r *http.Request) {

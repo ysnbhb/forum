@@ -55,7 +55,7 @@ function runButton(idButton) {
     }
 
     // Make the POST request
-    fetch("/user/singup", {
+    fetch("../user/singup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -66,9 +66,12 @@ function runButton(idButton) {
     })
       .then((res) => {
         if (res.ok) {
-          console.log("Signup successful");
+          window.open("/login");
         } else {
-          console.error("Signup failed:", res.statusText);
+          const err = document.createElement("div");
+          res.json().then((data) => {
+            err.innerHTML = data.error;
+          });
         }
       })
       .catch((error) => {
