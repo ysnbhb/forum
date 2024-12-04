@@ -9,7 +9,7 @@ import (
 
 func Server(w http.ResponseWriter, r *http.Request) {
 	filename := "." + "/template" + r.URL.Path
-	stat, err := os.Open(filename)
+	file, err := os.ReadFile(filename)
 	if err != nil {
 		http.Error(w, "Page not Found", http.StatusNotFound)
 		return
@@ -19,5 +19,5 @@ func Server(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.Header().Set("Contant-Type", "text/css")
 	}
-	http.ServeContent(w, r, filename, time.Now(), stat)
+	http.ServeContent(w, r, filename, time.Now(), strings.NewReader(string(file)))
 }

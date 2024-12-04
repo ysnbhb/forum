@@ -1,21 +1,24 @@
 package server
 
 import (
-	"fmt"
+	"forum/database"
 	"html/template"
 	"net/http"
 )
 
 func PageSingUp(w http.ResponseWriter, r *http.Request) {
-	// if r.URL.Path != "/" {
-	// 	http.Error(w, "Page not Found", http.StatusNotFound)
-	// 	return
-	// }
 	tmp, err := template.ParseFiles("template/html/index.html")
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
+	}
+	cookie, err := r.Cookie("tookn")
+	db := database.IntDB()
+	if err == nil && cookie.HttpOnly {
+		if db.CheckEXist(cookie.Value) {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
 	}
 	tmp.Execute(w, nil)
 }

@@ -9,7 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func Intalction() *handul.Date {
+func IntDB() *handul.Date {
 	db, err := sql.Open("sqlite3", "forum.db")
 	if err != nil {
 		log.Fatal(err)
@@ -59,13 +59,19 @@ func CreateTable(db *handul.Date) error {
 		FOREIGN KEY (user_id) REFERENCES user(id)
 	);
 
-	CREATE TABLE IF NOT EXISTS like_dislike(
+	CREATE TABLE IF NOT EXISTS reaction(
 		id INTEGER PRIMARY KEY AUTOINCREMENT , 
 		post_id INTEGER , 
+		comment_id INTEGER ,
 		user_id INTEGER ,
 		type TEXT  , 
-		FOREIGN KEY (post_id) REFERENCES post(id)
+		FOREIGN KEY (post_id) REFERENCES post(id),
 		FOREIGN KEY (user_id) REFERENCES user(id)
+		FOREIGN KEY (comment_id) REFERENCES comment(id),
+		CHECK (
+		(post_id IS NOT NULL AND comment_id IS NULL)
+		OR	(post_id IS  NULL AND comment_id IS NOT  NULL)
+		)
 	);
 
 	CREATE TABLE IF NOT EXISTS session (
@@ -74,15 +80,6 @@ func CreateTable(db *handul.Date) error {
 		user_id INTEGER, 
 		create_date DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES user (id)
-	);
-	
-	CREATE TABLE IF NOT EXISTS like_dislike_comment(
-		id INTEGER PRIMARY KEY  AUTOINCREMENT,
-		user_id INTEGER ,
-		comment_id INTEGER ,
-		type TEXT ,
-		FOREIGN KEY (user_id) REFERENCES user (id) ,
-		FOREIGN KEY (comment_id) REFERENCES comment (id)
 	);
 	INSERT INTO categories (name_categorie)
 	VALUES 

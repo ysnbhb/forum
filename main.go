@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	DB := database.Intalction()
+	DB := database.IntDB()
 	err := database.CreateTable(DB)
 	if err != nil {
 		fmt.Println(err)
@@ -19,6 +19,5 @@ func main() {
 	http.HandleFunc("/js/", server.Server)
 	http.HandleFunc("/style/", server.Server)
 	http.HandleFunc("/user/singup", DB.SingUp)
-	http.HandleFunc("/user/check", DB.CheckEXist)
 	http.ListenAndServe(":8080", nil)
 }

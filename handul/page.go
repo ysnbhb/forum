@@ -2,7 +2,6 @@ package handul
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -16,7 +15,6 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 	}
 	user := User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
-	fmt.Println(user)
 	w.Header().Set("Content-type", "application/json")
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -27,11 +25,14 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "invalid input for logup"})
 		return
 	}
-
 	err = db.Insert(user)
-	if err != nil {
+	if err != nil && (err.Error() == "email" || err.Error() == "user name") {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "email or user name already exists"})
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error() + " already used try anther " + err.Error()})
+		return
+	} else if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "sorry but there are error in server try anther time"})
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -39,22 +40,13 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (db *Date) CheckEXist(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		return
-	}
-	checker := r.FormValue("checker")
+func (db *Date) CheckEXist(checker string) bool {
 	exist := false
 	err := db.DB.QueryRow(`
 		SELECT EXISTS(
 			SELECT 1 
-			FROM user
-			WHERE user_name = ? OR email = ?
+			FROM session
+			WHERE uid = ?
 		)`, checker, checker).Scan(&exist)
-	fmt.Println(exist, err)
-	if err != nil || !exist {
-		w.WriteHeader(200)
-	} else {
-		w.WriteHeader(400)
-	}
+	return err == nil && exist
 }

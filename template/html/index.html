@@ -20,19 +20,24 @@
         <div class="contenr-input">
           <div class="input-div">
             <div>
-              <label class="lable-clase" id="user_lable">user name</label>
+              <label class="lable-clase">user name</label>
+              <label id="user_label"></label>
             </div>
             <input type="text" placeholder="user name" class="input-clas" id="user_name" />
           </div>
           <div class="input-div">
             <div>
-              <label class="lable-clase" id="email_lable">email</label>
+              <label class="lable-clase">email</label>
+              <label id="email_label"></label>
+
             </div>
             <input type="email" placeholder="email" class="input-clas" id="email" required />
           </div>
           <div class="input-div">
             <div class="lable-clase">
               <label>password</label>
+              <label id="passwd_lable"></label>
+
             </div>
 
             <input type="password" placeholder="password" id="password" class="input-clas" />
@@ -43,6 +48,7 @@
           <div class="input-div">
             <div class="lable-clase">
               <label>confermet password</label>
+              <label id="confermet_lable"></label>
             </div>
 
             <input type="password" placeholder="confermet password" id="confpassword" class="input-clas" />
@@ -55,6 +61,7 @@
           </div>
         </div>
       </form>
+      <div class="error_message" id="error_message"></div>
     </div>
   </div>
   <script src="../js/script.js"></script>
