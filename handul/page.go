@@ -2,6 +2,7 @@ package handul
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -26,13 +27,9 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	err = db.Insert(user)
-	if err != nil && (err.Error() == "email" || err.Error() == "user name") {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": err.Error() + " already used try anther " + err.Error()})
-		return
-	} else if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]string{"error": "sorry but there are error in server try anther time"})
+	if err != nil {
+		w.WriteHeader(http.StatusFound)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 		return
 	}
 	w.WriteHeader(http.StatusOK)
@@ -40,13 +37,19 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (db *Date) CheckEXist(checker string) bool {
-	exist := false
-	err := db.DB.QueryRow(`
-		SELECT EXISTS(
-			SELECT 1 
-			FROM session
-			WHERE uid = ?
-		)`, checker, checker).Scan(&exist)
-	return err == nil && exist
+func (db *Date) SingIn(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		return
+	} else if r.Method != http.MethodPost {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
+	userInf := r.FormValue("userInf")
+	passwd := r.FormValue("passwd")
+	id, err := db.Select(userInf, passwd)
+	if err != nil {
+		fmt.Fprintf(w, "%v", err)
+		return
+	}
+	fmt.Println(id)
 }

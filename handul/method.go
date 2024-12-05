@@ -1,6 +1,7 @@
 package handul
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 )
@@ -11,6 +12,7 @@ func (db *Date) Insert(user User) error {
 	`
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
+
 		return fmt.Errorf("check your Input")
 	}
 	defer stmt.Close()
@@ -19,9 +21,44 @@ func (db *Date) Insert(user User) error {
 		return nil
 	}
 	if strings.Contains(err.Error(), "user_name") {
-		return fmt.Errorf("user name")
+		return fmt.Errorf("user name already used try anther user name")
 	} else if strings.Contains(err.Error(), "email") {
-		return fmt.Errorf("email")
+		return fmt.Errorf("email already used try anther email")
 	}
-	return err
+	return fmt.Errorf("sorry but there are error in server try anther time")
+}
+
+func (db *Date) Select(userIfo, passwd string) (int, error) {
+	query := `SELECT id , passwd FROM user
+		WHERE user_name = ?
+	`
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		fmt.Println(err)
+		return -1, fmt.Errorf("check your input")
+	}
+	defer stmt.Close()
+	var userpasswd string
+	var id int
+	err = stmt.QueryRow(userIfo).Scan(&id, &userpasswd)
+	if err == sql.ErrNoRows {
+		return -1, fmt.Errorf("user or password not correct")
+	} else if err != nil {
+		return -1, fmt.Errorf("problem in server try anther time")
+	}
+	if userpasswd != passwd {
+		return -1, fmt.Errorf("user or password not correct")
+	}
+	return id, nil
+}
+
+func (db *Date) CheckEXist(checker string) bool {
+	exist := false
+	err := db.DB.QueryRow(`
+		SELECT EXISTS(
+			SELECT 1 
+			FROM session
+			WHERE uid = ?
+		)`, checker, checker).Scan(&exist)
+	return err == nil && exist
 }

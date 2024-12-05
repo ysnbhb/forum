@@ -1,19 +1,4 @@
-function showPss(idButtom, idPassword) {
-  let hiden = true;
-  const button = document.getElementById(idButtom);
-  button.addEventListener("click", (event) => {
-    event.preventDefault();
-    const password = document.getElementById(idPassword);
-    if (hiden) {
-      password.setAttribute("type", "text");
-      button.innerHTML = "visibility_off";
-    } else {
-      password.setAttribute("type", "password");
-      button.innerHTML = "visibility";
-    }
-    hiden = !hiden;
-  });
-}
+import { showPss } from "./showPas.js";
 
 function confermetPas() {
   const password = document.getElementById("password");
@@ -95,7 +80,7 @@ function runButton(idButton) {
     })
       .then((res) => {
         if (res.ok) {
-          window.location.href = "/login";
+          window.location.href = "/singin";
         } else {
           res.json().then((data) => {
             if (data.error) {
@@ -117,7 +102,8 @@ function runButton(idButton) {
       });
   });
 }
-showPss("changTYpe", "password");
-showPss("changContype", "confpassword");
 
 runButton("sing-up");
+showPss("changTYpe", "password");
+showPss("changContype", "confpassword");
+export {showPss}

@@ -16,8 +16,10 @@ func main() {
 		return
 	}
 	http.HandleFunc("/singup", server.PageSingUp)
+	http.HandleFunc("/singin", server.PageSingIn)
 	http.HandleFunc("/js/", server.Server)
 	http.HandleFunc("/style/", server.Server)
 	http.HandleFunc("/user/singup", DB.SingUp)
+	http.HandleFunc("/user/singin", DB.SingIn)
 	http.ListenAndServe(":8080", nil)
 }
