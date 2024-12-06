@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -78,4 +79,60 @@ func (db *Date) CraeteSession(userid int, session string) error {
 	_, err = stmt.Exec(userid, session, session)
 
 	return err
+}
+
+func (db *Date) DeleteSession() {
+	layout := "2006-01-02 15:04:05"
+	diff_time := time.Now().Add(-time.Second * 20).Format(layout)
+	query := `SELECT id, create_date FROM session`
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer stmt.Close()
+	tx, err := db.DB.Begin()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer tx.Rollback()
+	rows, err := stmt.Query()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer rows.Close()
+
+	lasttime := ""
+	id := 0
+	for rows.Next() {
+		err = rows.Scan(&id, &lasttime)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		time_last, err := time.Parse(layout, lasttime)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		time_diff, err := time.Parse(layout, diff_time)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		// fmt.Println(, time_last.Sub(time_diff).Seconds())
+		fmt.Println(time_last.Second() - time_diff.Second())
+		if time_last.Second() <= time_diff.Second() {
+			_, err = tx.Exec(`DELETE FROM session WHERE id = ?`, id)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+		}
+	}
+	if err := tx.Commit(); err != nil {
+		fmt.Println("Error committing transaction:", err)
+	}
 }
