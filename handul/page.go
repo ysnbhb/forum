@@ -102,7 +102,6 @@ func IsValidUsername(username string) bool {
 	if username == "" {
 		return false
 	}
-	fmt.Println(username)
 	last := []rune(username)[0]
 	for _, c := range username {
 		if c == '_' {
