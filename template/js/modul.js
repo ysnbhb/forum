@@ -15,4 +15,11 @@ function showPss(idButtom, idPassword) {
   });
 }
 
-export {showPss}
+function removespace(idInput) {
+  const input = document.getElementById(idInput);
+  input.addEventListener("input", () => {
+    input.value = input.value.replace(/\s/g, ""); // Remove all spaces
+  });
+}
+
+export { showPss, removespace };

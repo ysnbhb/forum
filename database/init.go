@@ -77,7 +77,7 @@ func CreateTable(db *handul.Date) error {
 	CREATE TABLE IF NOT EXISTS session (
 		id INTEGER PRIMARY KEY, 
 		uid TEXT UNIQUE, 
-		user_id INTEGER, 
+		user_id INTEGER UNIQUE, 
 		create_date DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES user (id)
 	);

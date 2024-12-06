@@ -15,10 +15,11 @@ func PageSingIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandlePage(w http.ResponseWriter, r *http.Request, htmlfile string) {
-	cookie, err := r.Cookie("tookn")
-	if err == nil && cookie.HttpOnly {
+	cookie, err := r.Cookie("token")
+	if err == nil {
 		db := database.IntDB()
-		if db.CheckEXist(cookie.Value) {
+		exist := db.CheckEXist(cookie.Value)
+		if exist {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}

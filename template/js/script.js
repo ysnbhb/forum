@@ -1,4 +1,4 @@
-import { showPss } from "./showPas.js";
+import { showPss, removespace } from "./modul.js";
 
 function confermetPas() {
   const password = document.getElementById("password");
@@ -102,8 +102,8 @@ function runButton(idButton) {
       });
   });
 }
-
+removespace("email");
+removespace("user_name");
 runButton("sing-up");
 showPss("changTYpe", "password");
 showPss("changContype", "confpassword");
-export {showPss}
