@@ -78,7 +78,7 @@ func CreateTable(db *handul.Date) error {
 		id INTEGER PRIMARY KEY, 
 		uid TEXT UNIQUE, 
 		user_id INTEGER UNIQUE, 
-		create_date DEFAULT CURRENT_TIMESTAMP,
+		create_date DATE DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES user (id)
 	);
 	INSERT INTO categories (name_categorie)

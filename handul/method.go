@@ -82,8 +82,8 @@ func (db *Date) CraeteSession(userid int, session string) error {
 }
 
 func (db *Date) DeleteSession() {
-	layout := "2006-01-02 15:04:05"
-	diff_time := time.Now().Add(-time.Second * 20).Format(layout)
+	// layout := "2006-01-02 15:04:05"
+	diff_time := time.Now().Add(-time.Hour * 24)
 	query := `SELECT id, create_date FROM session`
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
@@ -104,7 +104,7 @@ func (db *Date) DeleteSession() {
 	}
 	defer rows.Close()
 
-	lasttime := ""
+	var lasttime time.Time
 	id := 0
 	for rows.Next() {
 		err = rows.Scan(&id, &lasttime)
@@ -112,19 +112,7 @@ func (db *Date) DeleteSession() {
 			fmt.Println(err)
 			continue
 		}
-		time_last, err := time.Parse(layout, lasttime)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		time_diff, err := time.Parse(layout, diff_time)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		// fmt.Println(, time_last.Sub(time_diff).Seconds())
-		fmt.Println(time_last.Second() - time_diff.Second())
-		if time_last.Second() <= time_diff.Second() {
+		if lasttime.Second() <= diff_time.Second() {
 			_, err = tx.Exec(`DELETE FROM session WHERE id = ?`, id)
 			if err != nil {
 				fmt.Println(err)
