@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
-	"time"
 
 	"forum/database"
 	"forum/server"
@@ -11,23 +10,25 @@ import (
 
 func main() {
 	DB := database.IntDB()
-	err := database.CreateTable(DB)
+	err := database.CreateTable(&DB)
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal("Error creating tables: ", err)
 		return
 	}
-	http.HandleFunc("/singup", server.PageSingUp)
-	http.HandleFunc("/singin", server.PageSingIn)
+
+	api := server.New("8080", DB)
+
+	http.HandleFunc("/singup", api.PageSingUp)
+	http.HandleFunc("/singin", api.PageSingIn)
+
+	http.HandleFunc("/user/singup", api.DB.SingUp)
+	http.HandleFunc("/user/singin", api.DB.SingIn)
+
 	http.HandleFunc("/js/", server.Server)
 	http.HandleFunc("/style/", server.Server)
-	http.HandleFunc("/user/singup", DB.SingUp)
-	http.HandleFunc("/user/singin", DB.SingIn)
-	tricker := time.NewTicker(time.Second * 2)
-	go func() {
-		for {
-			DB.DeleteSession()
-			<-tricker.C
-		}
-	}()
-	http.ListenAndServe(":8080", nil)
+
+	err = http.ListenAndServe(":8081", nil)
+	if err != nil {
+		log.Fatal("Error starting the server: ", err) // Handle error more effectively
+	}
 }

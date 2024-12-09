@@ -83,6 +83,7 @@ function runButton(idButton) {
           window.location.href = "/singin";
         } else {
           res.json().then((data) => {
+            console.log(data);
             if (data.error) {
               div.innerHTML = data.error;
               div.style.width = "100%";

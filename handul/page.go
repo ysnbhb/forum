@@ -67,6 +67,7 @@ func (db *Date) SingIn(w http.ResponseWriter, r *http.Request) {
 	if !IsValidEmail(userInf) && !IsValidUsername(userInf) || passwd == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "check you input")
+		fmt.Println("check you input")
 		return
 	}
 	id, err := db.Select(userInf, passwd)

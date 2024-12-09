@@ -9,12 +9,12 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func IntDB() *handul.Date {
+func IntDB() handul.Date {
 	db, err := sql.Open("sqlite3", "forum.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	return &handul.Date{
+	return handul.Date{
 		DB: db,
 	}
 }

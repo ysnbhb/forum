@@ -1,22 +1,30 @@
 package server
 
 import (
-	"forum/database"
 	"html/template"
 	"net/http"
+
+	"forum/database"
+	"forum/handul"
 )
 
-func PageSingUp(w http.ResponseWriter, r *http.Request) {
-	HandlePage(w, r, "singup.html")
+type Apiserve struct {
+	DB   handul.Date
+	Port string
 }
 
-func PageSingIn(w http.ResponseWriter, r *http.Request) {
-	HandlePage(w, r, "singin.html")
+func (api *Apiserve) PageSingUp(w http.ResponseWriter, r *http.Request) {
+	api.HandlePage(w, r, "singup.html")
 }
 
-func HandlePage(w http.ResponseWriter, r *http.Request, htmlfile string) {
+func (api *Apiserve) PageSingIn(w http.ResponseWriter, r *http.Request) {
+	api.HandlePage(w, r, "singin.html")
+}
+
+func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile string) {
 	cookie, err := r.Cookie("token")
 	if err == nil {
+		// api.DB.CheckEXist(cookie.Value)
 		db := database.IntDB()
 		exist := db.CheckEXist(cookie.Value)
 		if exist {
@@ -30,4 +38,11 @@ func HandlePage(w http.ResponseWriter, r *http.Request, htmlfile string) {
 		return
 	}
 	tmp.Execute(w, nil)
+}
+
+func New(api string, DB handul.Date) *Apiserve {
+	return &Apiserve{
+		Port: api,
+		DB:   DB,
+	}
 }
