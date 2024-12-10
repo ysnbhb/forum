@@ -10,7 +10,6 @@ import (
 
 type Apiserve struct {
 	DB   handul.Date
-	Port string
 }
 
 func (api *Apiserve) PageSingUp(w http.ResponseWriter, r *http.Request) {
@@ -40,9 +39,8 @@ func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile
 	tmp.Execute(w, nil)
 }
 
-func New(api string, DB handul.Date) *Apiserve {
+func New(DB handul.Date) *Apiserve {
 	return &Apiserve{
-		Port: api,
 		DB:   DB,
 	}
 }

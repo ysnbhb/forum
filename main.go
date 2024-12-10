@@ -16,7 +16,7 @@ func main() {
 		return
 	}
 
-	api := server.New("8080", DB)
+	api := server.New(DB)
 
 	http.HandleFunc("/singup", api.PageSingUp)
 	http.HandleFunc("/singin", api.PageSingIn)
