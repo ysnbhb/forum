@@ -1,16 +1,17 @@
-package handul
+package dbhandal
 
 import (
 	"database/sql"
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
+
+	"forum/utils"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (db *Date) Insert(user User) (int, error) {
+func (db *Date) Insert(user utils.User) (int, error) {
 	query := `INSERT INTO user (user_name , email , passwd) 
 		VALUES (?, ? , ?)
 	`
@@ -79,48 +80,4 @@ func (db *Date) CraeteSession(userid int, session string) error {
 	_, err = stmt.Exec(userid, session, session)
 
 	return err
-}
-
-func (db *Date) DeleteSession() {
-	// layout := "2006-01-02 15:04:05"
-	diff_time := time.Now().Add(-time.Hour * 24)
-	query := `SELECT id, create_date FROM session`
-	stmt, err := db.DB.Prepare(query)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer stmt.Close()
-	tx, err := db.DB.Begin()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer tx.Rollback()
-	rows, err := stmt.Query()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer rows.Close()
-
-	var lasttime time.Time
-	id := 0
-	for rows.Next() {
-		err = rows.Scan(&id, &lasttime)
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-		if lasttime.Second() <= diff_time.Second() {
-			_, err = tx.Exec(`DELETE FROM session WHERE id = ?`, id)
-			if err != nil {
-				fmt.Println(err)
-				continue
-			}
-		}
-	}
-	if err := tx.Commit(); err != nil {
-		fmt.Println("Error committing transaction:", err)
-	}
 }

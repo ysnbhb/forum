@@ -1,7 +1,11 @@
-import { showPss, removespace } from "./modul.js";
+import { showPss, removespace, exists, headers } from "./modul.js";
 
 showPss("changTYpe", "password");
 
+headers();
+
+exists();
+console.log(window.location.href);
 function singIn() {
   const bottum = document.getElementById("sing-in");
   const passwordd = document.getElementById("password");

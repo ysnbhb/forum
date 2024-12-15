@@ -1,4 +1,4 @@
-package handul
+package dbhandal
 
 import (
 	"encoding/json"
@@ -7,6 +7,8 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+
+	"forum/utils"
 
 	"github.com/gofrs/uuid/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -20,7 +22,7 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "method not allown"})
 		return
 	}
-	user := User{}
+	user := utils.User{}
 	err := json.NewDecoder(r.Body).Decode(&user)
 	w.Header().Set("Content-type", "application/json")
 	if err != nil {
@@ -95,6 +97,20 @@ func (db *Date) SingIn(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Path:     "/",
 	})
+}
+
+func (db *Date) Exist(w http.ResponseWriter, r *http.Request) {
+	cookis, err := r.Cookie("token")
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	if db.CheckEXist(cookis.Value) {
+		w.WriteHeader(http.StatusFound)
+		return
+	} else {
+		w.WriteHeader(http.StatusNotFound)
+	}
 }
 
 // This for valid username

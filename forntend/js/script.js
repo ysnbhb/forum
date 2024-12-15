@@ -1,4 +1,6 @@
-import { showPss, removespace } from "./modul.js";
+import { showPss, removespace, exists  , headers} from "./modul.js";
+exists();
+headers()
 
 function confermetPas() {
   const password = document.getElementById("password");

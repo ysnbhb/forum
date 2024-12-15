@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"forum/database"
-	"forum/handul"
+	"forum/dbhandal"
 )
 
 type Apiserve struct {
-	DB   handul.Date
+	DB dbhandal.BD
 }
 
 func (api *Apiserve) PageSingUp(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +23,6 @@ func (api *Apiserve) PageSingIn(w http.ResponseWriter, r *http.Request) {
 func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile string) {
 	cookie, err := r.Cookie("token")
 	if err == nil {
-		// api.DB.CheckEXist(cookie.Value)
 		db := database.IntDB()
 		exist := db.CheckEXist(cookie.Value)
 		if exist {
@@ -31,7 +30,7 @@ func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile
 			return
 		}
 	}
-	tmp, err := template.ParseFiles("template/html/" + htmlfile)
+	tmp, err := template.ParseFiles("veiw/" + htmlfile)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
@@ -39,8 +38,8 @@ func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile
 	tmp.Execute(w, nil)
 }
 
-func New(DB handul.Date) *Apiserve {
+func New(DB *dbhandal.Date) *Apiserve {
 	return &Apiserve{
-		DB:   DB,
+		DB: DB,
 	}
 }

@@ -10,7 +10,7 @@ import (
 
 func main() {
 	DB := database.IntDB()
-	err := database.CreateTable(&DB)
+	err := database.CreateTable(DB)
 	if err != nil {
 		log.Fatal("Error creating tables: ", err)
 		return
@@ -23,10 +23,9 @@ func main() {
 
 	http.HandleFunc("/user/singup", api.DB.SingUp)
 	http.HandleFunc("/user/singin", api.DB.SingIn)
-
-	http.HandleFunc("/js/", server.Server)
-	http.HandleFunc("/style/", server.Server)
-
+	http.HandleFunc("/user/exist", api.DB.Exist)
+	http.HandleFunc("/forntend/", server.Server)
+	println("server is run in http://localhost:8081/")
 	err = http.ListenAndServe(":8081", nil)
 	if err != nil {
 		log.Fatal("Error starting the server: ", err) // Handle error more effectively

@@ -8,7 +8,7 @@ import (
 )
 
 func Server(w http.ResponseWriter, r *http.Request) {
-	filename := "." + "/template" + r.URL.Path
+	filename := "." + r.URL.Path
 	file, err := os.ReadFile(filename)
 	if err != nil {
 		http.Error(w, "Page not Found", http.StatusNotFound)
