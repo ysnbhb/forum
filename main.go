@@ -19,6 +19,7 @@ func main() {
 	api := server.New(DB)
 
 	http.HandleFunc("/singup", api.PageSingUp)
+	http.HandleFunc("/", server.Page)
 	http.HandleFunc("/singin", api.PageSingIn)
 
 	http.HandleFunc("/user/singup", api.DB.SingUp)

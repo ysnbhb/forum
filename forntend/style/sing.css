@@ -11,7 +11,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
+  height: 93vh;
   color: #333;
   background-color: #2b7ac938;
 }
@@ -27,6 +27,7 @@
   border-radius: 8px;
   padding: 12px 20px;
   font-size: 16px;
+  margin-right: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -39,7 +40,6 @@
 .Navbar,
 .link,
 .img-div {
-  width: 30%;
   text-align: center;
   text-decoration: none;
   color: #094b53d6;
@@ -64,7 +64,7 @@ header {
   box-shadow: -3px 6px 19px 2px #31393173;
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 

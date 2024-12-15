@@ -5,3 +5,11 @@ type User struct {
 	Email     string `json:"email"`
 	Passwd    string `json:"passwd"`
 }
+
+type ErrorData struct {
+	Msg1       string
+	Msg2       string
+	StatusCode int
+}
+
+

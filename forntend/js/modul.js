@@ -34,10 +34,9 @@ function Format(sing1, sing2, link) {
   return `
         <div class="img-div">
               <a href="/">
-                <img src="../forntend/image/login.jpg" alt="" />
+                <img src="../forntend/image/forum.jpeg" alt="" />
               </a>
               </div>
-                    <nav class="Navbar">welcome to page ${sing1}</nav>
               <div class="link">
                    <a href="/${link}"><button class="btn-link">${sing2}</button></a>
                        

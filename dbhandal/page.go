@@ -16,6 +16,7 @@ import (
 
 func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Fount", "The page you are looking for is not available!", nil)
 		return
 	} else if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
