@@ -6,6 +6,10 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"regexp"
+	"unicode"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string, err error) {
@@ -29,6 +33,7 @@ func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string, err 
 
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, Error); err != nil {
+		fmt.Println(err)
 		http.Error(w, msg1, statusCode)
 		return
 	}
@@ -36,3 +41,63 @@ func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string, err 
 	// If successful, write the buffer content to the ResponseWriter
 	buf.WriteTo(w)
 }
+
+func IsValidUsername(username string) bool {
+	if username == "" {
+		return false
+	}
+	last := []rune(username)[0]
+	for _, c := range username {
+		if c == '_' {
+			if last == '_' {
+				return false
+			}
+			last = c
+			continue
+		}
+		if !unicode.IsLetter(c) && !unicode.IsDigit(c) {
+			return false
+		}
+		last = c
+	}
+	return true
+}
+
+// This for valid email
+
+func IsValidEmail(email string) bool {
+	re := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+	regex := regexp.MustCompile(re)
+	return regex.MatchString(email)
+}
+
+func HasPassowd(password string) (string, error) {
+	hashpassord, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hashpassord), nil
+}
+
+func IsValidPassword(password string) bool {
+	hasUpper := false
+	hasLower := false
+	hasDigit := false
+	hasSpecial := false
+
+	for _, ch := range password {
+		if unicode.IsUpper(ch) {
+			hasUpper = true
+		} else if unicode.IsLower(ch) {
+			hasLower = true
+		} else if unicode.IsDigit(ch) {
+			hasDigit = true
+		} else if !unicode.IsLetter(ch) && !unicode.IsDigit(ch) {
+			hasSpecial = true
+		}
+	}
+
+	return hasUpper && hasLower && hasDigit && hasSpecial
+}
+
+

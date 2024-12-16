@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../forntend/style/home.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=close"
+    />
+    <title>Home Page</title>
+  </head>
+  <body>
+    <div class="content">
+      <div class="singpopup" id="popup">
+        <button class="close" id="close">
+          <span class="material-symbols-outlined"> close </span>
+        </button>
+        <div class="popup">
+          <div class="sing">You are Not Login :</div>
+          <div class="link-sing">
+            <div class="sing-in">
+              <a href="/singin"
+                ><button class="btn-link">you have account?</button></a
+              >
+            </div>
+
+            <div class="sing-up">
+              <a href="/singup"
+                ><button class="btn-link">you don't have account?</button></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const btn = document.getElementById("close");
+      btn.addEventListener("click", () => {
+        document.getElementById("popup").classList.add("closepop");
+        setTimeout(() => {
+          document.getElementById("popup").remove();
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

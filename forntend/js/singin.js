@@ -4,7 +4,12 @@ showPss("changTYpe", "password");
 
 headers();
 
-exists();
+exists().then((userExsit) => {
+  if (userExsit) {
+    window.location.href = "/";
+  }
+});
+
 console.log(window.location.href);
 function singIn() {
   const bottum = document.getElementById("sing-in");

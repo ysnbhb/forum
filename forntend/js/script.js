@@ -1,6 +1,19 @@
-import { showPss, removespace, exists  , headers} from "./modul.js";
-exists();
-headers()
+import { showPss, removespace, exists, headers } from "./modul.js";
+headers();
+
+exists()
+  .then((userExists) => {
+    if (userExists) {
+      window.location.href = "/";
+    }
+  })
+  .catch((error) => {
+    console.error("An error occurred:", error);
+  });
+
+// if (check) {
+//
+// }
 
 function confermetPas() {
   const password = document.getElementById("password");

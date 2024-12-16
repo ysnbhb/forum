@@ -12,9 +12,9 @@ type BD interface {
 	SingIn(http.ResponseWriter, *http.Request)
 	Insert(utils.User) (int, error)
 	Select(string, string) (int, error)
-	CheckEXist(string) bool
 	CraeteSession(int, string) error
 	Exist(http.ResponseWriter, *http.Request)
+	TakeName(http.ResponseWriter, string) bool
 }
 
 type Date struct {

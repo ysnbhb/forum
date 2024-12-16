@@ -2,6 +2,7 @@ package dbhandal
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -56,17 +57,6 @@ func (db *Date) Select(userIfo, passwd string) (int, error) {
 	return id, nil
 }
 
-func (db *Date) CheckEXist(checker string) bool {
-	exist := false
-	err := db.DB.QueryRow(`
-		SELECT EXISTS(
-			SELECT 1 
-			FROM session
-			WHERE uid = ?
-		)`, checker, checker).Scan(&exist)
-	return err == nil && exist
-}
-
 func (db *Date) CraeteSession(userid int, session string) error {
 	query := `INSERT INTO session(user_id , uid)
 		VALUES(?,?)
@@ -80,4 +70,28 @@ func (db *Date) CraeteSession(userid int, session string) error {
 	_, err = stmt.Exec(userid, session, session)
 
 	return err
+}
+
+func (db *Date) TakeName(w http.ResponseWriter, str string) bool {
+	query := `SELECT (user_id) FROM session WHERE uid = ?`
+	id := 0
+	err := db.DB.QueryRow(query, str).Scan(&id)
+	if err != nil {
+		fmt.Println(err, 14)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{"error": "user not Found"})
+		return false
+	}
+	userName := ""
+	query = `SELECT (user_name) FROM user WHERE id = ?`
+	err = db.DB.QueryRow(query, id).Scan(&userName)
+	if err != nil {
+		fmt.Println(err, 54)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{"error": "user not Found"})
+		return false
+	}
+	w.WriteHeader(http.StatusFound)
+	json.NewEncoder(w).Encode(map[string]string{"userName": userName})
+	return true
 }

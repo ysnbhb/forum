@@ -4,14 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"regexp"
 	"strings"
-	"unicode"
 
 	"forum/utils"
 
 	"github.com/gofrs/uuid/v5"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
@@ -30,17 +27,17 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "invalid input for logup"})
 		return
-	} else if user.Email == "" || user.Passwd == "" || user.User_name == "" {
+	} else if !utils.IsValidEmail(user.Email) || !utils.IsValidUsername(user.User_name) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "invalid input for logup"})
 		return
 	}
-	if !IsValidUsername(user.User_name) || !IsValidEmail(user.Email) {
+	if !utils.IsValidPassword(user.Passwd) {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "check you input , invalid input"})
+		json.NewEncoder(w).Encode(map[string]string{"error": "password is weak"})
 		return
 	}
-	user.Passwd, err = HasPassowd(user.Passwd)
+	user.Passwd, err = utils.HasPassowd(user.Passwd)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{"error": "sorry but there are error in server try anther time"})
@@ -53,7 +50,7 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(map[string]string{"status": "user insert into database"})
+	json.NewEncoder(w).Encode(map[string]string{"status": "user saved."})
 }
 
 func (db *Date) SingIn(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +64,7 @@ func (db *Date) SingIn(w http.ResponseWriter, r *http.Request) {
 	userInf := r.FormValue("userInf")
 	userInf = strings.TrimLeft(userInf, " ")
 	passwd := r.FormValue("passwd")
-	if !IsValidEmail(userInf) && !IsValidUsername(userInf) || passwd == "" {
+	if !utils.IsValidEmail(userInf) && !utils.IsValidUsername(userInf) || passwd == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "check you input")
 		fmt.Println("check you input")
@@ -106,49 +103,5 @@ func (db *Date) Exist(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	if db.CheckEXist(cookis.Value) {
-		w.WriteHeader(http.StatusFound)
-		return
-	} else {
-		w.WriteHeader(http.StatusNotFound)
-	}
-}
-
-// This for valid username
-
-func IsValidUsername(username string) bool {
-	if username == "" {
-		return false
-	}
-	last := []rune(username)[0]
-	for _, c := range username {
-		if c == '_' {
-			if last == '_' {
-				return false
-			}
-			last = c
-			continue
-		}
-		if !unicode.IsLetter(c) && !unicode.IsDigit(c) {
-			return false
-		}
-		last = c
-	}
-	return true
-}
-
-// This for valid email
-
-func IsValidEmail(email string) bool {
-	re := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
-	regex := regexp.MustCompile(re)
-	return regex.MatchString(email)
-}
-
-func HasPassowd(password string) (string, error) {
-	hashpassord, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return "", err
-	}
-	return string(hashpassord), nil
+	db.TakeName(w, cookis.Value)
 }

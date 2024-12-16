@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"net/http"
 
-	"forum/database"
 	"forum/dbhandal"
 )
 
@@ -21,15 +20,6 @@ func (api *Apiserve) PageSingIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile string) {
-	cookie, err := r.Cookie("token")
-	if err == nil {
-		db := database.IntDB()
-		exist := db.CheckEXist(cookie.Value)
-		if exist {
-			http.Redirect(w, r, "/", http.StatusSeeOther)
-			return
-		}
-	}
 	tmp, err := template.ParseFiles("veiw/" + htmlfile)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

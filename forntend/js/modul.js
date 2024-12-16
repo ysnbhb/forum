@@ -18,16 +18,23 @@ function showPss(idButtom, idPassword) {
 function removespace(idInput) {
   const input = document.getElementById(idInput);
   input.addEventListener("input", () => {
-    input.value = input.value.replace(/\s/g, ""); // Remove all spaces
+    input.value = input.value.replace(/\s/g, "");
   });
 }
 
 async function exists() {
-  fetch("/user/exist", { method: "POST" }).then((res) => {
-    if (res.status === 302 || res.ok) {
-      window.location.href = "/";
+  try {
+    const res = await fetch("/user/exist", { method: "POST" });
+    if (res.ok || res.status === 302) {
+      const data = await res.json();
+      localStorage.setItem("userName", data.userName);
     }
-  });
+
+    return res.ok || res.status === 302;
+  } catch (error) {
+    console.error("Error checking user existence:", error);
+    return false;
+  }
 }
 
 function Format(sing1, sing2, link) {
@@ -47,12 +54,13 @@ function Format(sing1, sing2, link) {
 function headers() {
   const singup = `sing up`;
   const singin = `sing in`;
-  const headers = document.getElementById("header");
+  const headers = document.createElement("header");
   if (window.location.href === "http://localhost:8081/singin") {
     headers.innerHTML = Format(singin, singup, "singup");
   } else {
     headers.innerHTML = Format(singup, singin, "singin");
   }
+  document.body.prepend(headers);
 }
 
 export { showPss, removespace, exists, headers };
