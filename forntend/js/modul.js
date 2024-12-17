@@ -37,7 +37,7 @@ async function exists() {
   }
 }
 
-function Format(sing1, sing2, link) {
+function Format(sing, link) {
   return `
         <div class="img-div">
               <a href="/">
@@ -45,7 +45,7 @@ function Format(sing1, sing2, link) {
               </a>
               </div>
               <div class="link">
-                   <a href="/${link}"><button class="btn-link">${sing2}</button></a>
+                   <a href="/${link}"><button class="btn-link">${sing}</button></a>
                        
         </div> 
   `;
@@ -56,11 +56,15 @@ function headers() {
   const singin = `sing in`;
   const headers = document.createElement("header");
   if (window.location.href === "http://localhost:8081/singin") {
-    headers.innerHTML = Format(singin, singup, "singup");
+    headers.innerHTML = Format(singup, "singup");
   } else {
-    headers.innerHTML = Format(singup, singin, "singin");
+    headers.innerHTML = Format(singin, "singin");
   }
   document.body.prepend(headers);
 }
+
+
+const userHeader = ``
+
 
 export { showPss, removespace, exists, headers };

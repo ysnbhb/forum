@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="content">
-      <div class="singpopup" id="popup">
+      <div class="singpopup closepop" id="popup">
         <button class="close" id="close">
           <span class="material-symbols-outlined"> close </span>
         </button>
@@ -33,15 +33,7 @@
           </div>
         </div>
       </div>
+      <button id="click">click</button>
     </div>
-    <script>
-      const btn = document.getElementById("close");
-      btn.addEventListener("click", () => {
-        document.getElementById("popup").classList.add("closepop");
-        setTimeout(() => {
-          document.getElementById("popup").remove();
-        }, 1000);
-      });
-    </script>
   </body>
 </html>
