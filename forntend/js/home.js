@@ -1,5 +1,5 @@
 import { exists, showPss } from "./modul.js";
-import { ShowPop } from "./homemudul.js";
+import { ClosePop, ShowPop } from "./homemudul.js";
 function HandelHearder() {
   exists().then((userExict) => {
     if (userExict) {
@@ -11,5 +11,6 @@ function HandelHearder() {
 }
 
 ShowPop();
+ClosePop();
 
 HandelHearder();
