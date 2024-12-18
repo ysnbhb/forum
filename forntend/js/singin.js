@@ -2,7 +2,7 @@ import { showPss, removespace, exists, headers } from "./modul.js";
 
 showPss("changTYpe", "password");
 
-headers();
+headers("sign up", "signup");
 
 exists().then((userExsit) => {
   if (userExsit) {
@@ -21,7 +21,7 @@ function singIn() {
       userinf.focus();
       userinf.style.border = "1.8px solid red";
       return;
-    } else {
+    } else if (userinf.value) {
       userinf.style.border = "1px solid #ccc";
     }
     if (passwordd.value === "") {
@@ -33,7 +33,7 @@ function singIn() {
     }
     const error = document.getElementById("error_message");
     error.style.color = "red";
-    fetch("/user/singin", {
+    fetch("/user/signin", {
       method: "POST",
       body: new URLSearchParams({
         userInf: userinf.value,

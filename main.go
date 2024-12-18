@@ -18,12 +18,12 @@ func main() {
 
 	api := server.New(DB)
 
-	http.HandleFunc("/singup", api.PageSingUp)
+	http.HandleFunc("/signup", api.PageSingUp)
 	http.HandleFunc("/", server.Page)
-	http.HandleFunc("/singin", api.PageSingIn)
-
-	http.HandleFunc("/user/singup", api.DB.SingUp)
-	http.HandleFunc("/user/singin", api.DB.SingIn)
+	http.HandleFunc("/signin", api.PageSingIn)
+	http.HandleFunc("/logout", server.LogOut)
+	http.HandleFunc("/user/signup", api.DB.SingUp)
+	http.HandleFunc("/user/signin", api.DB.SingIn)
 	http.HandleFunc("/user/exist", api.DB.Exist)
 	http.HandleFunc("/forntend/", server.Server)
 	println("server is run in http://localhost:8081/")

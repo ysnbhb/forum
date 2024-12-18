@@ -1,5 +1,5 @@
 import { showPss, removespace, exists, headers } from "./modul.js";
-headers();
+headers("sign in", "signin");
 
 exists()
   .then((userExists) => {
@@ -67,6 +67,11 @@ function runButton(idButton) {
       userName.focus();
       userName.style.border = "1.8px solid red";
       return;
+    } else if (userName.value.length > 10) {
+      labe_user.innerHTML = "user name is too long max 10 letter";
+      userName.focus();
+      userName.style.border = "1.8px solid red";
+      return;
     } else {
       labe_user.innerHTML = "";
       userName.style.border = "1px solid #ccc";
@@ -84,7 +89,7 @@ function runButton(idButton) {
       return;
     }
     const div = document.getElementById("error_message");
-    fetch("../user/singup", {
+    fetch("../user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -95,7 +100,7 @@ function runButton(idButton) {
     })
       .then((res) => {
         if (res.ok) {
-          window.location.href = "/singin";
+          window.location.href = "/signin";
         } else {
           res.json().then((data) => {
             console.log(data);

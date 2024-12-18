@@ -43,7 +43,7 @@ func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string, err 
 }
 
 func IsValidUsername(username string) bool {
-	if username == "" {
+	if username == "" || len(username) > 10 {
 		return false
 	}
 	last := []rune(username)[0]
@@ -99,5 +99,3 @@ func IsValidPassword(password string) bool {
 
 	return hasUpper && hasLower && hasDigit && hasSpecial
 }
-
-

@@ -77,7 +77,6 @@ func (db *Date) TakeName(w http.ResponseWriter, str string) bool {
 	id := 0
 	err := db.DB.QueryRow(query, str).Scan(&id)
 	if err != nil {
-		fmt.Println(err, 14)
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]string{"error": "user not Found"})
 		return false
@@ -86,7 +85,6 @@ func (db *Date) TakeName(w http.ResponseWriter, str string) bool {
 	query = `SELECT (user_name) FROM user WHERE id = ?`
 	err = db.DB.QueryRow(query, id).Scan(&userName)
 	if err != nil {
-		fmt.Println(err, 54)
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]string{"error": "user not Found"})
 		return false

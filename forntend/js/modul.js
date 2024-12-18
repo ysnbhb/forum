@@ -51,20 +51,11 @@ function Format(sing, link) {
   `;
 }
 
-function headers() {
-  const singup = `sing up`;
-  const singin = `sing in`;
+function headers(sign1 , sign2) {
   const headers = document.createElement("header");
-  if (window.location.href === "http://localhost:8081/singin") {
-    headers.innerHTML = Format(singup, "singup");
-  } else {
-    headers.innerHTML = Format(singin, "singin");
-  }
+  headers.innerHTML = Format(sign1, sign2);
   document.body.prepend(headers);
 }
-
-
-const userHeader = ``
 
 
 export { showPss, removespace, exists, headers };

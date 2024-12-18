@@ -23,3 +23,14 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	}
 	tmp.Execute(w, nil)
 }
+
+func LogOut(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		HttpOnly: false,
+		Value:    "",
+		Name:     "token",
+		MaxAge:   0,
+		Path:     "/",
+	})
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}

@@ -59,6 +59,15 @@ function HandelHearder(islogin) {
   const div = document.createElement("div");
   if (islogin) {
     const popup = document.createElement("div");
+    const divIcon = document.createElement("div");
+    divIcon.className = "div-icon";
+    divIcon.innerHTML = `
+      <a href="/addPost">
+          <span class="material-symbols-outlined" style="font-size: 35px ; color: #000;">
+            add
+          </span>
+        </a>
+    `;
     popup.className = "PrLog";
     popup.id = "PrLog";
     popup.innerHTML = `
@@ -69,14 +78,11 @@ function HandelHearder(islogin) {
         </a>
       </div>
       <div class="classic">
-        <a href="/loguot"><span class="material-symbols-outlined">logout</span><p>loguot</p></a>
-        
+        <a href="/logout"><span class="material-symbols-outlined">logout</span><p>logout</p></a>
       </div>
-       <div class="classic">
-        <a href="/postAdd"><span class="material-symbols-outlined">add_circle</span><p>Add Post</p></a>
-      </div>
+
     `;
-    document.body.append(popup);
+    document.body.append(popup, divIcon);
     div.className = "link";
     div.id = "link";
     div.innerHTML = `
@@ -84,11 +90,20 @@ function HandelHearder(islogin) {
           <span class="material-symbols-outlined icon" style="font-size: xx-large;"> person </span></a
         >`;
 
-    header.append(div);
     ShowPop(div);
   } else {
+    div.className = "nolog_link";
+    div.innerHTML = `
+        <a href="/signup" class="sign"
+        ><button class="nolog_bnt">Signup</button></a
+        >
+        <a href="/signin" class="sign"
+        ><button class="nolog_bnt">Signin</button></a
+        >
+        `;
     console.log("no log");
   }
+  header.append(div);
   document.body.prepend(header);
 }
 
