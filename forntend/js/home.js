@@ -1,16 +1,10 @@
-import { exists, showPss } from "./modul.js";
-import { ClosePop, ShowPop } from "./homemudul.js";
-function HandelHearder() {
-  exists().then((userExict) => {
-    if (userExict) {
-    } else {
-    }
-  });
-  const userName = localStorage.getItem("userName");
-  console.log(userName);
+import { exists } from "./modul.js";
+import { ClosePop, HandelHearder, ShowPop } from "./homemudul.js";
+async function Hande() {
+  let islogin = false;
+  islogin = await exists();
+
+  HandelHearder(islogin);
 }
-
-ShowPop();
+Hande();
 ClosePop();
-
-HandelHearder();
