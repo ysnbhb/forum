@@ -1,4 +1,4 @@
-package dbhandal
+package controllers
 
 import (
 	"database/sql"
@@ -15,6 +15,7 @@ type BD interface {
 	CraeteSession(int, string) error
 	Exist(http.ResponseWriter, *http.Request)
 	TakeName(http.ResponseWriter, string) bool
+	LastID(http.ResponseWriter, *http.Request)
 }
 
 type Date struct {

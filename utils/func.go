@@ -24,7 +24,7 @@ func ErrorHandler(w http.ResponseWriter, statusCode int, msg1, msg2 string, err 
 		StatusCode: statusCode,
 	}
 
-	tmpl, err := template.ParseFiles("./veiw/error.html")
+	tmpl, err := template.ParseFiles("./view/error.html")
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, msg1, statusCode)

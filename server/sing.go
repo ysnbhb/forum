@@ -4,11 +4,12 @@ import (
 	"html/template"
 	"net/http"
 
-	"forum/dbhandal"
+	"forum/controllers"
+	"forum/utils"
 )
 
 type Apiserve struct {
-	DB dbhandal.BD
+	DB controllers.BD
 }
 
 func (api *Apiserve) PageSingUp(w http.ResponseWriter, r *http.Request) {
@@ -20,7 +21,11 @@ func (api *Apiserve) PageSingIn(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile string) {
-	tmp, err := template.ParseFiles("veiw/" + htmlfile)
+	if r.Method != http.MethodGet {
+		utils.ErrorHandler(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed), "this Page doesn't support your Method", nil)
+		return
+	}
+	tmp, err := template.ParseFiles("view/" + htmlfile)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
@@ -28,7 +33,7 @@ func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile
 	tmp.Execute(w, nil)
 }
 
-func New(DB *dbhandal.Date) *Apiserve {
+func New(DB *controllers.Date) *Apiserve {
 	return &Apiserve{
 		DB: DB,
 	}

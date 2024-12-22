@@ -3,7 +3,6 @@
   padding: 0;
   /* box-sizing: border-box; */
 }
-
 body {
   display: flex;
   flex-direction: column;
@@ -19,12 +18,14 @@ body {
   background: #2b7ac938;
 }
 
+/* start of not sign style */
+
 .singpopup {
   width: 25%;
   height: 25%;
   display: flex;
   flex-direction: column;
-  position: fixed; /* it possible do error */
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -54,6 +55,10 @@ body {
   position: absolute;
   top: 7%;
 }
+
+/* end of style of user not sign */
+
+/* start of style header and popup of header */
 
 .popup {
   background: #cdcdcd96;
@@ -220,7 +225,118 @@ header {
 .div-icon:hover {
   cursor: pointer;
 }
+/* end of style header and popup of header */
+.interErro {
+  position: fixed;
+  right: 5%;
+  top: 10%;
+  height: 26px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  border-radius: 6px;
+}
 
+/*
+  style of post popup 
+ */
+
+.postpop {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+#title,
+#contant {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #45434378;
+  border-radius: 4px;
+}
+
+#img {
+  display: none;
+}
+
+#submit {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#submit:hover {
+  background-color: #0056b3;
+}
+
+.upload-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  border: 2px dashed #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.upload-icon span {
+  color: #007bff;
+  font-size: 24px;
+}
+
+@media (max-width: 600px) {
+  .postpop {
+    width: 95%;
+    padding: 15px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  #title,
+  #contant {
+    font-size: 14px;
+  }
+
+  #submit {
+    font-size: 14px;
+    padding: 8px;
+  }
+  .upload-icon span {
+    font-size: 20px;
+  }
+}
+/* end of style of popup */
+
+/* @ madia for heder and log out popup  */
 @media (max-width: 1200px) {
   .PrLog {
     width: 18%;
@@ -288,3 +404,5 @@ header {
     display: inline;
   }
 }
+
+/* end of syle of heder and log out popup */

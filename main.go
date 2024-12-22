@@ -25,10 +25,11 @@ func main() {
 	http.HandleFunc("/user/signup", api.DB.SingUp)
 	http.HandleFunc("/user/signin", api.DB.SingIn)
 	http.HandleFunc("/user/exist", api.DB.Exist)
-	http.HandleFunc("/forntend/", server.Server)
+	http.HandleFunc("/post/lastId", api.DB.LastID)
+	http.HandleFunc("/frontend/", server.Server)
 	println("server is run in http://localhost:8081/")
 	err = http.ListenAndServe(":8081", nil)
 	if err != nil {
-		log.Fatal("Error starting the server: ", err) // Handle error more effectively
+		log.Fatal("Error starting the server: ", err)
 	}
 }

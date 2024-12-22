@@ -52,7 +52,7 @@ function HandelHearder(islogin) {
   header.innerHTML = `
       <div class="img-div">
         <a href="/">
-          <img src="../forntend/image/logo.png" alt="" />
+          <img src="../frontend/image/logo.png" alt="" />
         </a>
       </div>
     `;
@@ -107,4 +107,49 @@ function HandelHearder(islogin) {
   document.body.prepend(header);
 }
 
-export { ShowPop, ClosePop, HandelHearder };
+async function addLastPost() {
+  let lastId, newId;
+  let errorSErve = 0;
+  let timer;
+
+  const res = await fetch("/post/lastId");
+  lastId = await res.text();
+
+  async function getLastID() {
+    try {
+      const res = await fetch("/post/lastId");
+      newId = await res.text();
+
+      if (lastId !== newId) {
+        const div = document.createElement("div");
+        div.innerHTML = "New post has been published!";
+        div.className = "interErro";
+        div.style.backgroundColor = "#71bb49c9";
+        document.body.append(div);
+        setTimeout(() => div.remove(), 3000);
+
+        lastId = newId; 
+      }
+    } catch (error) {
+      console.error("Error fetching last ID:", error, errorSErve);
+      errorSErve++;
+
+      if (errorSErve > 20) {
+        if (!document.getElementById("interErro")) {
+          const div = document.createElement("div");
+          div.innerHTML = "Check your internet connection!";
+          div.className = "interErro";
+          div.id = "interErro";
+          div.style.backgroundColor = "#ff0000ab";
+          document.body.append(div);
+        }
+
+        clearInterval(timer); 
+      }
+    }
+  }
+
+  timer = setInterval(getLastID, 5000);
+}
+
+export { ShowPop, ClosePop, HandelHearder, addLastPost };

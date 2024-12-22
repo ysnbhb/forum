@@ -3,18 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../forntend/style/home.css" />
+    <link rel="stylesheet" href="../frontend/style/home.css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
     />
     <title>Forum</title>
-    <link rel="icon" href="../forntend/image/icon.png" />
+    <link rel="icon" href="../frontend/image/icon.png" />
   </head>
   <body>
-    <!-- <header>
-      
-    </header> -->
     <div class="content">
       <div class="singpopup closepop" id="popup">
         <button class="close" id="close">
@@ -39,6 +36,34 @@
       </div>
       <button id="click">click</button>
     </div>
+    <div class="postpop" id="postpop">
+      <form method="post">
+        <label for="img">Upload Image:</label>
+        <label class="upload-icon" for="img">
+          <span class="material-symbols-outlined">add_a_photo</span>
+        </label>
+        <input type="file" id="img" name="img" accept="image/*" />
+
+        <label for="title">Post Title:</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          placeholder="Enter post title"
+          required
+        />
+
+        <label for="contant">Content:</label>
+        <textarea
+          id="contant"
+          name="content"
+          placeholder="Write your content here"
+          required
+        ></textarea>
+
+        <button type="submit" id="submit">Submit</button>
+      </form>
+    </div>
   </body>
-  <script type="module" src="../forntend/js/home.js"></script>
+  <script type="module" src="../frontend/js/home.js"></script>
 </html>

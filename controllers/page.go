@@ -1,4 +1,4 @@
-package dbhandal
+package controllers
 
 import (
 	"encoding/json"

@@ -4,22 +4,22 @@ import (
 	"database/sql"
 	"log"
 
-	"forum/dbhandal"
+	"forum/controllers"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func IntDB() *dbhandal.Date {
+func IntDB() *controllers.Date {
 	db, err := sql.Open("sqlite3", "forum.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	return &dbhandal.Date{
+	return &controllers.Date{
 		DB: db,
 	}
 }
 
-func CreateTable(db *dbhandal.Date) error {
+func CreateTable(db *controllers.Date) error {
 	qeury := `CREATE TABLE IF NOT EXISTS user(
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_name TEXT UNIQUE , 

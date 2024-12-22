@@ -1,4 +1,4 @@
-package dbhandal
+package controllers
 
 import (
 	"database/sql"
@@ -92,4 +92,14 @@ func (db *Date) TakeName(w http.ResponseWriter, str string) bool {
 	w.WriteHeader(http.StatusFound)
 	json.NewEncoder(w).Encode(map[string]string{"userName": userName})
 	return true
+}
+
+func (db *Date) LastID(w http.ResponseWriter, r *http.Request) {
+	query := `
+		SELECT seq FROM sqlite_sequence WHERE name = 'post';
+
+	`
+	var lastId int
+	db.DB.QueryRow(query).Scan(&lastId)
+	fmt.Fprint(w, lastId)
 }
