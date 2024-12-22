@@ -16,6 +16,8 @@ type BD interface {
 	Exist(http.ResponseWriter, *http.Request)
 	TakeName(http.ResponseWriter, string) bool
 	LastID(http.ResponseWriter, *http.Request)
+	GetCtg(http.ResponseWriter, *http.Request)
+	GetPost(http.ResponseWriter, *http.Request)
 }
 
 type Date struct {

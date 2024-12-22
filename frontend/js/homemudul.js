@@ -128,7 +128,7 @@ async function addLastPost() {
         document.body.append(div);
         setTimeout(() => div.remove(), 3000);
 
-        lastId = newId; 
+        lastId = newId;
       }
     } catch (error) {
       console.error("Error fetching last ID:", error, errorSErve);
@@ -144,7 +144,7 @@ async function addLastPost() {
           document.body.append(div);
         }
 
-        clearInterval(timer); 
+        clearInterval(timer);
       }
     }
   }
@@ -152,4 +152,16 @@ async function addLastPost() {
   timer = setInterval(getLastID, 5000);
 }
 
-export { ShowPop, ClosePop, HandelHearder, addLastPost };
+async function getCgt() {
+  return await fetch("/api/getCategorie").then(async (response) => {
+    if (!response.ok) {
+      content.innerHTML = "not ok";
+      return;
+    }
+    return await response.json().then((data) => {
+      return data;
+    });
+  });
+}
+
+export { ShowPop, ClosePop, HandelHearder, addLastPost, getCgt };

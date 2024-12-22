@@ -27,6 +27,11 @@ func main() {
 	http.HandleFunc("/user/exist", api.DB.Exist)
 	http.HandleFunc("/post/lastId", api.DB.LastID)
 	http.HandleFunc("/frontend/", server.Server)
+
+	// api
+	http.HandleFunc("/api/getCategorie", api.DB.GetCtg)
+	http.HandleFunc("/api/post", api.DB.GetPost)
+	// run server
 	println("server is run in http://localhost:8081/")
 	err = http.ListenAndServe(":8081", nil)
 	if err != nil {

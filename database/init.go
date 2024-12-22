@@ -34,6 +34,7 @@ func CreateTable(db *controllers.Date) error {
 		title TEXT, 
 		contant TEXT , 
 		create_date DEFAULT CURRENT_TIMESTAMP ,
+		categories TEXT  , 
 		FOREIGN KEY  (user_id) REFERENCES user(id) 
 	) ;
 

@@ -16,6 +16,7 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 		utils.ErrorHandler(w, http.StatusNotFound, "Page not Fount", "The page you are looking for is not available!", nil)
 		return
 	} else if r.Method != http.MethodPost {
+		w.Header().Set("Content-type", "application/json")
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(map[string]string{"error": "method not allown"})
 		return
@@ -55,9 +56,10 @@ func (db *Date) SingUp(w http.ResponseWriter, r *http.Request) {
 
 func (db *Date) SingIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Fount", "The page you are looking for is not available!", nil)
 		return
 	} else if r.Method != http.MethodPost {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		utils.ErrorHandler(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed), "this Page doesn't support you method", nil)
 		return
 
 	}
@@ -67,7 +69,6 @@ func (db *Date) SingIn(w http.ResponseWriter, r *http.Request) {
 	if !utils.IsValidEmail(userInf) && !utils.IsValidUsername(userInf) || passwd == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "check you input")
-		fmt.Println("check you input")
 		return
 	}
 	id, err := db.Select(userInf, passwd)
@@ -104,4 +105,22 @@ func (db *Date) Exist(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	db.TakeName(w, cookis.Value)
+}
+
+func (db *Date) GetCtg(w http.ResponseWriter, r *http.Request) {
+	categories := []string{}
+	query := `
+		SELECT (name_categorie) FROM categories
+	`
+	row, err := db.DB.Query(query)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for row.Next() {
+		var categorie string
+		row.Scan(&categorie)
+		categories = append(categories, categorie)
+	}
+	json.NewEncoder(w).Encode(categories)
 }
