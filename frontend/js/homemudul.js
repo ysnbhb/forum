@@ -49,7 +49,6 @@ function ClosePop() {
 function HandelHearder(islogin) {
   const userName = localStorage.getItem("userName");
   const header = document.createElement("header");
-  console.log(islogin);
   header.innerHTML = `
       <div class="img-div">
         <a href="/">
@@ -155,6 +154,12 @@ async function addLastPost() {
   timer = setInterval(getLastID, 5000);
 }
 
+function getCheckedCheckboxes() {
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');  
+  const checkedValues = Array.from(checkboxes).map(checkbox => checkbox.value); 
+  return checkedValues;
+}
+
 async function getCgt() {
   return await fetch("/api/getCategorie").then(async (response) => {
     return await response.json().then((data) => {
@@ -163,4 +168,4 @@ async function getCgt() {
   });
 }
 
-export { ShowPop, ClosePop, HandelHearder, addLastPost, getCgt };
+export { ShowPop, ClosePop, HandelHearder, addLastPost, getCgt  , getCheckedCheckboxes};

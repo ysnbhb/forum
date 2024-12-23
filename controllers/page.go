@@ -129,4 +129,5 @@ func (db *Date) GetCtg(w http.ResponseWriter, r *http.Request) {
 func (db *Date) AddPost(w http.ResponseWriter, r *http.Request) {
 	file, _, err := r.FormFile("img")
 	fmt.Println(file, err)
+
 }

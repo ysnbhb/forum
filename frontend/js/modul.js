@@ -1,4 +1,4 @@
-import { getCgt } from "./homemudul.js";
+import { getCgt, getCheckedCheckboxes } from "./homemudul.js";
 
 function showPss(idButtom, idPassword) {
   let hiden = true;
@@ -67,6 +67,7 @@ function ctreatAddpost() {
     event.stopPropagation();
   });
   add.addEventListener("click", (event) => {
+    // console.log(show);
     event.stopPropagation();
     if (show) {
       document.body.append(div);
@@ -96,15 +97,17 @@ function ctreatAddpost() {
             required
           ></textarea>
             <div class="checkbox" id="checkbox"></div>
+            <div id="error"></div>
           <button type="submit" id="submit">Submit</button>
         </form>
         `;
       FormatCheckbok();
       addPost(div);
+      show = false;
     } else {
+      show = true;
       div.remove();
     }
-    show = !show;
   });
   window.addEventListener("click", () => {
     if (!show) {
@@ -114,37 +117,65 @@ function ctreatAddpost() {
   });
 }
 
-function addPost(div) {
+async function addPost(div) {
   const btn = document.getElementById("submit");
-  btn.addEventListener("click", (event) => {
+  const err = document.getElementById("error");
+  btn.addEventListener("click", async (event) => {
     event.preventDefault();
+
     const img = document.getElementById("img");
     const title = document.getElementById("title");
-    const contant = document.getElementById("contant");
+    const content = document.getElementById("contant");
+
     if (title.value === "") {
       title.focus();
       return false;
     } else {
       title.style.border = "";
     }
-    if (contant.value === "") {
-      contant.focus();
+
+    if (content.value === "") {
+      content.focus();
       return false;
     } else {
-      contant.style.border = "";
+      content.style.border = "";
     }
+    const categories = getCheckedCheckboxes();
+    if (categories.length === 0) {
+      err.innerText = ` please aprove  categorie of this post`;
+      err.style.color = "red";
+      err.style.height = "30px";
+      err.style.width = "90%";
+      err.style.textAlign = "center";
 
-    if (img.files[0] && !img.type.startsWith("image/")) {
+      return;
+    } else {
+      err.innerText = ``;
+      err.style.height = "0";
+    }
+    if (img.files[0] && !img.files[0].type.startsWith("image/")) {
       img.focus();
       return false;
     }
+
     const form = new FormData();
     form.append("img", img.files[0]);
     form.append("title", title.value);
-    form.append("contant", contant.value);
-    fetch("/api/addPost", { method: "POST", body: form });
-    div.remove();
-    return true;
+    form.append("content", content.value);
+    form.append("categories", JSON.stringify(categories));
+
+    try {
+      const response = await fetch("/api/addPost", {
+        method: "POST",
+        body: form,
+      });
+      div.remove();
+      return true;
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+      return false; // Return false if there was an error
+    }
   });
 }
 
@@ -155,7 +186,7 @@ async function FormatCheckbok() {
     const chek = document.createElement("div");
     chek.className = "checkbox-container";
     chek.innerHTML = `
-        <input type="checkbox" id="${ctg[i]}" />
+        <input type="checkbox" id="${ctg[i]}" value=${ctg[i]} />
             <label for="${ctg[i]}">${ctg[i]}</label>
     `;
     div.append(chek);
