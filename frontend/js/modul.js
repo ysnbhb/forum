@@ -1,3 +1,5 @@
+import { getCgt } from "./homemudul.js";
+
 function showPss(idButtom, idPassword) {
   let hiden = true;
   const button = document.getElementById(idButtom);
@@ -93,10 +95,11 @@ function ctreatAddpost() {
             placeholder="Write your content here"
             required
           ></textarea>
-  
+            <div class="checkbox" id="checkbox"></div>
           <button type="submit" id="submit">Submit</button>
         </form>
         `;
+      FormatCheckbok();
       addPost();
     } else {
       div.remove();
@@ -131,16 +134,33 @@ function addPost() {
     } else {
       contant.style.border = "";
     }
-    if (!img.type.startsWith('image/')) {
-      img.focus()
+    if (!img.type.startsWith("image/")) {
+      img.focus();
       return;
-  }
-    const form = new FormData() 
-    form.append("img" , img.files[0])
-    form.append("title" , title.value)
-    form.append("contant" , contant.value)
-    fetch("/api/addPost", { method: "POST"  , body :form});
+    }
+    const form = new FormData();
+    form.append("img", img.files[0]);
+    form.append("title", title.value);
+    form.append("contant", contant.value);
+    fetch("/api/addPost", { method: "POST", body: form });
   });
+}
+
+async function FormatCheckbok() {
+  const div = document.getElementById("checkbox");
+  const ctg = await getCgt();
+  console.log(ctg);
+  for (let i = 0; i < ctg.length; i++) {
+    console.log(ctg);
+    
+    const chek = document.createElement("div");
+    chek.className = "checkbox-container";
+    chek.innerHTML = `
+        <input type="checkbox" id="${ctg[i]}" />
+            <label for="${ctg[i]}">${ctg[i]}</label>
+    `;
+    div.append(chek);
+  }
 }
 
 export { showPss, removespace, exists, headers, ctreatAddpost };

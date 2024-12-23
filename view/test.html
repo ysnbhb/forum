@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../frontend/style/home.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+    <title>Forum</title>
+    <link rel="icon" href="../frontend/image/icon.png" />
+    <style>
+      .checkbox {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+        width: 90%;
+        height: 40px;
+      }
+
+      /* Styling for each checkbox container */
+      .checkbox-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding-left: 30px;
+        font-size: 14px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <div class="singpopup closepop" id="popup">
+        <button class="close" id="close">
+          <span class="material-symbols-outlined"> close </span>
+        </button>
+        <div class="popup">
+          <div class="sing">You are Not Login :</div>
+          <div class="link-sing">
+            <div class="sing-in">
+              <a href="/singin"
+                ><button class="btn-link">you have account?</button></a
+              >
+            </div>
+
+            <div class="sing-up">
+              <a href="/singup"
+                ><button class="btn-link">you don't have account?</button></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="click">click</button>
+    </div>
+    <div class="postpop">
+      <form method="post">
+        <label for="img">Upload Image:</label>
+        <label class="upload-icon" for="img" id="icon-img">
+          <span class="material-symbols-outlined">add_a_photo</span>
+        </label>
+        <input type="file" id="img" name="img" accept="image/*" />
+
+        <label for="title">Post Title:</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          placeholder="Enter post title"
+          required
+        />
+
+        <label for="contant">Content:</label>
+        <textarea
+          id="contant"
+          name="content"
+          placeholder="Write your content here"
+          required
+        ></textarea>
+
+        <div class="checkbox">
+          <div class="checkbox-container">
+            <input type="checkbox" id="id" />
+            <label for="id">ID</label>
+          </div>
+          <div class="checkbox-container">
+            <input type="checkbox" id="admin" />
+            <label for="admin">Admin</label>
+          </div>
+          <div class="checkbox-container">
+            <input type="checkbox" id="admin" />
+            <label for="admin">Admin</label>
+          </div>
+          <div class="checkbox-container">
+            <input type="checkbox" id="admin" />
+            <label for="admin">Admin</label>
+          </div>
+          <div class="checkbox-container">
+            <input type="checkbox" id="user" />
+            <label for="user">User</label>
+          </div>
+          <div class="checkbox-container">
+            <input type="checkbox" id="other" />
+            <label for="other">Other</label>
+          </div>
+        </div>
+
+        <button type="submit" id="submit">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>

@@ -312,6 +312,74 @@ label {
   font-size: 24px;
 }
 
+.checkbox {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  width: 90%;
+  margin-bottom: 10px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.checkbox-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  font-size: 14px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+
+.checkbox-container input[type="checkbox"] {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+
+.checkbox-container input[type="checkbox"] + label {
+  position: relative;
+  cursor: pointer;
+  padding-left: 30px;
+}
+
+.checkbox-container input[type="checkbox"]:checked + label::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 16px;
+  color: green;
+}
+
+.checkbox-container label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-container:hover label::before {
+  border-color: #4caf50;
+}
+
+.checkbox-container input[type="checkbox"]:active + label::before {
+  background-color: #e0e0e0;
+}
+
 @media (max-width: 600px) {
   .postpop {
     width: 95%;

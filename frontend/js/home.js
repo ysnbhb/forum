@@ -12,7 +12,7 @@ async function Hande() {
 
   HandelHearder(islogin);
   addLastPost();
-  console.log(await getCgt());
+  // console.log(await getCgt());
 }
 Hande();
 ClosePop();
