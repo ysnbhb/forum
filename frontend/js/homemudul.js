@@ -157,10 +157,6 @@ async function addLastPost() {
 
 async function getCgt() {
   return await fetch("/api/getCategorie").then(async (response) => {
-    if (!response.ok) {
-      content.innerHTML = "not ok";
-      return;
-    }
     return await response.json().then((data) => {
       return data;
     });

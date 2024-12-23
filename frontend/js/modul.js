@@ -100,22 +100,21 @@ function ctreatAddpost() {
         </form>
         `;
       FormatCheckbok();
-      addPost();
+      addPost(div);
     } else {
       div.remove();
     }
     show = !show;
   });
   window.addEventListener("click", () => {
-    console.log(show);
     if (!show) {
       div.remove();
-      show = !show;
+      show = true;
     }
   });
 }
 
-function addPost() {
+function addPost(div) {
   const btn = document.getElementById("submit");
   btn.addEventListener("click", (event) => {
     event.preventDefault();
@@ -124,35 +123,35 @@ function addPost() {
     const contant = document.getElementById("contant");
     if (title.value === "") {
       title.focus();
-      return;
+      return false;
     } else {
       title.style.border = "";
     }
     if (contant.value === "") {
       contant.focus();
-      return;
+      return false;
     } else {
       contant.style.border = "";
     }
-    if (!img.type.startsWith("image/")) {
+
+    if (img.files[0] && !img.type.startsWith("image/")) {
       img.focus();
-      return;
+      return false;
     }
     const form = new FormData();
     form.append("img", img.files[0]);
     form.append("title", title.value);
     form.append("contant", contant.value);
     fetch("/api/addPost", { method: "POST", body: form });
+    div.remove();
+    return true;
   });
 }
 
 async function FormatCheckbok() {
   const div = document.getElementById("checkbox");
   const ctg = await getCgt();
-  console.log(ctg);
   for (let i = 0; i < ctg.length; i++) {
-    console.log(ctg);
-    
     const chek = document.createElement("div");
     chek.className = "checkbox-container";
     chek.innerHTML = `
