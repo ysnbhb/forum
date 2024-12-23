@@ -19,7 +19,7 @@ type Post struct {
 	UserName   string   `json:"userName"`
 	Title      string   `json:"title"`
 	Contant    string   `json:"contant"`
-	ImgUrl     string   `json:"img"`
+	ImgUrl     any      `json:"img"`
 	Categories []string `json:"categories"`
 	Reaction   Reaction `json:"reaction"`
 	Date       string   `json:"date"`

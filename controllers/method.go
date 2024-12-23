@@ -73,17 +73,15 @@ func (db *Date) CraeteSession(userid int, session string) error {
 }
 
 func (db *Date) TakeName(w http.ResponseWriter, str string) bool {
-	query := `SELECT (user_id) FROM session WHERE uid = ?`
-	id := 0
-	err := db.DB.QueryRow(query, str).Scan(&id)
-	if err != nil {
+	id := db.TakeId(str)
+	if id < 1 {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]string{"error": "user not Found"})
 		return false
 	}
 	userName := ""
-	query = `SELECT (user_name) FROM user WHERE id = ?`
-	err = db.DB.QueryRow(query, id).Scan(&userName)
+	query := `SELECT (user_name) FROM user WHERE id = ?`
+	err := db.DB.QueryRow(query, id).Scan(&userName)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]string{"error": "user not Found"})
@@ -102,4 +100,16 @@ func (db *Date) LastID(w http.ResponseWriter, r *http.Request) {
 	var lastId int
 	db.DB.QueryRow(query).Scan(&lastId)
 	fmt.Fprint(w, lastId)
+}
+
+func (db *Date) TakeId(secion string) int {
+	query := `
+		SELECT user_id FROM session WHERE uid = ?
+	`
+	id := 0
+	err := db.DB.QueryRow(query, secion).Scan(&id)
+	if err != nil {
+		return -1
+	}
+	return id
 }

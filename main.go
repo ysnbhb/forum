@@ -17,7 +17,6 @@ func main() {
 	}
 
 	api := server.New(DB)
-
 	http.HandleFunc("/signup", api.PageSingUp)
 	http.HandleFunc("/", server.Page)
 	http.HandleFunc("/signin", api.PageSingIn)
@@ -31,6 +30,7 @@ func main() {
 	// api
 	http.HandleFunc("/api/getCategorie", api.DB.GetCtg)
 	http.HandleFunc("/api/post", api.DB.GetPost)
+	http.HandleFunc("/api/addPost", api.DB.AddPost)
 	// run server
 	println("server is run in http://localhost:8081/")
 	err = http.ListenAndServe(":8081", nil)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"forum/utils"
 
@@ -92,7 +93,7 @@ func (db *Date) SingIn(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "token",
 		Value:    uid.String(),
-		MaxAge:   300,
+		MaxAge:   int(time.Hour),
 		HttpOnly: true,
 		Path:     "/",
 	})
@@ -123,4 +124,9 @@ func (db *Date) GetCtg(w http.ResponseWriter, r *http.Request) {
 		categories = append(categories, categorie)
 	}
 	json.NewEncoder(w).Encode(categories)
+}
+
+func (db *Date) AddPost(w http.ResponseWriter, r *http.Request) {
+	file, _, err := r.FormFile("img")
+	fmt.Println(file, err)
 }

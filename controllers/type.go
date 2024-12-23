@@ -18,6 +18,8 @@ type BD interface {
 	LastID(http.ResponseWriter, *http.Request)
 	GetCtg(http.ResponseWriter, *http.Request)
 	GetPost(http.ResponseWriter, *http.Request)
+	TakeId(string) int
+	AddPost(http.ResponseWriter, *http.Request)
 }
 
 type Date struct {

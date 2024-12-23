@@ -51,11 +51,96 @@ function Format(sing, link) {
   `;
 }
 
-function headers(sign1 , sign2) {
+function headers(sign1, sign2) {
   const headers = document.createElement("header");
   headers.innerHTML = Format(sign1, sign2);
   document.body.prepend(headers);
 }
 
+function ctreatAddpost() {
+  const add = document.getElementById("div-icon");
+  let show = true;
+  const div = document.createElement("div");
+  div.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+  add.addEventListener("click", (event) => {
+    event.stopPropagation();
+    if (show) {
+      document.body.append(div);
+      div.className = "postpop";
+      div.innerHTML = `
+            <form method="post">
+          <label for="img">Upload Image:</label>
+          <label class="upload-icon" for="img" id="icon-img">
+            <span class="material-symbols-outlined">add_a_photo</span>
+          </label>
+          <input type="file" id="img" name="img" accept="image/*" />
+  
+          <label for="title">Post Title:</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Enter post title"
+            required
+          />
+  
+          <label for="contant">Content:</label>
+          <textarea
+            id="contant"
+            name="content"
+            placeholder="Write your content here"
+            required
+          ></textarea>
+  
+          <button type="submit" id="submit">Submit</button>
+        </form>
+        `;
+      addPost();
+    } else {
+      div.remove();
+    }
+    show = !show;
+  });
+  window.addEventListener("click", () => {
+    console.log(show);
+    if (!show) {
+      div.remove();
+      show = !show;
+    }
+  });
+}
 
-export { showPss, removespace, exists, headers };
+function addPost() {
+  const btn = document.getElementById("submit");
+  btn.addEventListener("click", (event) => {
+    event.preventDefault();
+    const img = document.getElementById("img");
+    const title = document.getElementById("title");
+    const contant = document.getElementById("contant");
+    if (title.value === "") {
+      title.focus();
+      return;
+    } else {
+      title.style.border = "";
+    }
+    if (contant.value === "") {
+      contant.focus();
+      return;
+    } else {
+      contant.style.border = "";
+    }
+    if (!img.type.startsWith('image/')) {
+      img.focus()
+      return;
+  }
+    const form = new FormData() 
+    form.append("img" , img.files[0])
+    form.append("title" , title.value)
+    form.append("contant" , contant.value)
+    fetch("/api/addPost", { method: "POST"  , body :form});
+  });
+}
+
+export { showPss, removespace, exists, headers, ctreatAddpost };

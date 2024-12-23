@@ -1,3 +1,4 @@
+import { ctreatAddpost } from "./modul.js";
 function ShowPop(link) {
   let show = true;
   const popup = document.getElementById("PrLog");
@@ -61,12 +62,12 @@ function HandelHearder(islogin) {
     const popup = document.createElement("div");
     const divIcon = document.createElement("div");
     divIcon.className = "div-icon";
+    divIcon.id = "div-icon";
+
     divIcon.innerHTML = `
-      <a href="/addPost">
           <span class="material-symbols-outlined" style="font-size: 35px ; color: #000;">
             add
           </span>
-        </a>
     `;
     popup.className = "PrLog";
     popup.id = "PrLog";
@@ -91,6 +92,7 @@ function HandelHearder(islogin) {
         >`;
 
     ShowPop(div);
+    ctreatAddpost()
   } else {
     div.className = "nolog_link";
     div.innerHTML = `
@@ -105,6 +107,7 @@ function HandelHearder(islogin) {
   }
   header.append(div);
   document.body.prepend(header);
+	return
 }
 
 async function addLastPost() {
