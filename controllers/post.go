@@ -59,6 +59,7 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		post.Categories = strings.Split(Categories, " ,")
+		post.Reaction = db.GetReaction(r, post.Id, "post_id")
 		posts = append(posts, post)
 	}
 
