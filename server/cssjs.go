@@ -5,19 +5,16 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"forum/utils"
 )
 
 func Server(w http.ResponseWriter, r *http.Request) {
 	filename := "." + r.URL.Path
 	file, err := os.ReadFile(filename)
 	if err != nil {
-		http.Error(w, "Page not Found", http.StatusNotFound)
+		utils.ErrorHandler(w, http.StatusNotFound, "Page Not Found", "The page you are looking for is not available!", nil)
 		return
-	}
-	if strings.HasPrefix(r.URL.Path, "js") {
-		w.Header().Set("Contant-Type", "text/javascript")
-	} else {
-		w.Header().Set("Contant-Type", "text/css")
 	}
 	http.ServeContent(w, r, filename, time.Now(), strings.NewReader(string(file)))
 }

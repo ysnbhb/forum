@@ -9,7 +9,7 @@ import (
 
 func Page(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		utils.ErrorHandler(w, http.StatusNotFound, "Page not Fount", "The page you are looking for is not available!", nil)
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Found", "The page you are looking for is not available!", nil)
 		return
 	}
 	if r.Method != http.MethodGet {

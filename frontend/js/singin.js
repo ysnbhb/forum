@@ -10,7 +10,6 @@ exists().then((userExsit) => {
   }
 });
 
-console.log(window.location.href);
 function singIn() {
   const bottum = document.getElementById("sing-in");
   const passwordd = document.getElementById("password");

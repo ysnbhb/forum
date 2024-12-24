@@ -29,7 +29,8 @@ func main() {
 
 	// api
 	http.HandleFunc("/api/getCategorie", api.DB.GetCtg)
-	http.HandleFunc("/api/post", api.DB.GetPost)
+	http.HandleFunc("/api/posts", api.DB.GetPost)
+	http.HandleFunc("/api/post", api.DB.OnePost)
 	http.HandleFunc("/api/addPost", api.DB.AddPost)
 	// run server
 	println("server is run in http://localhost:8081/")

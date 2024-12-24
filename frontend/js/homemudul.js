@@ -102,7 +102,6 @@ function HandelHearder(islogin) {
         ><button class="nolog_bnt">Signin</button></a
         >
         `;
-    console.log("no log");
   }
   header.append(div);
   document.body.prepend(header);

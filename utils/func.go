@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"regexp"
@@ -98,4 +99,19 @@ func IsValidPassword(password string) bool {
 	}
 
 	return hasUpper && hasLower && hasDigit && hasSpecial
+}
+
+func IsImage(filePath io.Reader) (bool, error) {
+	buffer := make([]byte, 512)
+	_, err := filePath.Read(buffer)
+	if err != nil {
+		return false, err
+	}
+	contentType := http.DetectContentType(buffer)
+	fmt.Println("Content Type:", contentType)
+	return contentType == "image/jpeg" ||
+		contentType == "image/png" ||
+		contentType == "image/gif" ||
+		contentType == "image/webp" ||
+		contentType == "image/svg+xml", nil
 }

@@ -4,13 +4,10 @@ import (
 	"html/template"
 	"net/http"
 
-	"forum/controllers"
 	"forum/utils"
 )
 
-type Apiserve struct {
-	DB controllers.BD
-}
+
 
 func (api *Apiserve) PageSingUp(w http.ResponseWriter, r *http.Request) {
 	api.HandlePage(w, r, "singup.html")
@@ -31,10 +28,4 @@ func (api *Apiserve) HandlePage(w http.ResponseWriter, r *http.Request, htmlfile
 		return
 	}
 	tmp.Execute(w, nil)
-}
-
-func New(DB *controllers.Date) *Apiserve {
-	return &Apiserve{
-		DB: DB,
-	}
 }
