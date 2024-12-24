@@ -10,12 +10,12 @@ import (
 func (db *Date) GetReaction(r *http.Request, id int, typ string) utils.Reaction {
 	reaction := utils.Reaction{}
 	query := `
-		SELECT count(*) FROM reaction WHERE %s = ? AND type = likes
+		SELECT count(*) FROM reaction WHERE %s = ? AND type = 'likes'
 	`
 	query = fmt.Sprintf(query, typ)
 	db.DB.QueryRow(query, id).Scan(&reaction.NumLike)
 	query = `
-		SELECT count(*) FROM reaction WHERE %s = ? AND type = dislikes
+		SELECT count(*) FROM reaction WHERE %s = ? AND type = 'dislikes'
 	`
 	query = fmt.Sprintf(query, typ)
 	db.DB.QueryRow(query, id).Scan(&reaction.NumDisLike)
