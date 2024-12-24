@@ -127,15 +127,19 @@ async function addPost(div) {
     const title = document.getElementById("title");
     const content = document.getElementById("contant");
 
-    if (title.value === "") {
+    if (title.value.trim() === "") {
       title.focus();
+      title.style.border = "2px solid red";
+      err.innerText = "Title is required";
       return false;
     } else {
       title.style.border = "";
     }
 
-    if (content.value === "") {
+    if (content.value.trim() === "") {
       content.focus();
+      title.style.border = "2px solid red";
+      err.innerText = "Title is required";
       return false;
     } else {
       content.style.border = "";
@@ -143,10 +147,11 @@ async function addPost(div) {
     const categories = getCheckedCheckboxes();
     if (categories.length === 0) {
       err.innerText = ` please aprove  categorie of this post`;
-      err.style.color = "red";
-      err.style.height = "30px";
-      err.style.width = "90%";
-      err.style.textAlign = "center";
+      // err.style.color = "red";
+      // err.style.height = "30px";
+      // err.style.width = "90%";
+      // err.style.textAlign = "center";
+      err.classList.add("error-visible");
 
       return;
     } else {
@@ -169,6 +174,7 @@ async function addPost(div) {
         method: "POST",
         body: form,
       });
+      console.log(response);
       div.remove();
       return true;
     } catch (error) {

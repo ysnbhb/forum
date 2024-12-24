@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -29,7 +30,9 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
         post.id, 
         post.title, 
         post.contant, 
-        post.create_date
+        post.create_date , 
+		post.img ,
+		post.categories
     FROM 
         user
     INNER JOIN 
@@ -40,7 +43,6 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
         post.id DESC
     LIMIT ? OFFSET ?
 `
-
 	row, err := db.DB.Query(query, 20, "0")
 	if err != nil {
 		fmt.Println(err)
@@ -50,11 +52,13 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
 	defer row.Close()
 
 	for row.Next() {
+		Categories := ""
 		post := utils.Post{}
-		if err := row.Scan(&post.UserName, &post.Id, &post.Title, &post.Contant, &post.Date); err != nil {
+		if err := row.Scan(&post.UserName, &post.Id, &post.Title, &post.Contant, &post.Date, &post.ImgUrl, &Categories); err != nil {
 			fmt.Println("Error scanning row:", err)
 			continue
 		}
+		post.Categories = strings.Split(Categories, " ,")
 		posts = append(posts, post)
 	}
 
@@ -116,6 +120,11 @@ func (db *Date) AddPost(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusMethodNotAllowed)})
 		return
 	}
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		return
+	}
 	cookie, err := r.Cookie("token")
 	if err != nil {
 		w.WriteHeader(http.StatusNonAuthoritativeInfo)
@@ -123,25 +132,26 @@ func (db *Date) AddPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := db.TakeId(cookie.Value)
+
 	if id < 1 {
 		w.WriteHeader(http.StatusNonAuthoritativeInfo)
 		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusNonAuthoritativeInfo)})
 		return
 	}
 	query := `
-	 	INSERT INTO post(user_id , title , contant , img)
+	 	INSERT INTO post(user_id , title , contant , img , categories)
+		VALUES (? ,? ,? , ? , ?)
 	 `
 	post := utils.Post{}
-	_ = post
-	file, _, err := r.FormFile("img")
+	file, mut, err := r.FormFile("img")
 	if err == nil {
-		isimg, err := utils.IsImage(file)
-		if !isimg || err != nil {
+		isimg := utils.IsImage(mut)
+		if !isimg {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(map[string]string{"error": "file is not image"})
 			return
 		}
-		file, err := SaveImg(file)
+		file, err := SaveImg(file, mut)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(map[string]string{"error": "can't save file"})
@@ -149,37 +159,33 @@ func (db *Date) AddPost(w http.ResponseWriter, r *http.Request) {
 		}
 		post.ImgUrl = file
 	}
-	if HandulPost(r, &post) {
+	if db.HandulPost(r, &post) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "your input is not correct"})
 		return
 	}
-	_, err = db.DB.Exec(query, id)
+	categories := strings.Join(post.Categories, " ,")
+	_, err = db.DB.Exec(query, id, post.Title, post.Contant, post.ImgUrl, categories)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{"error": "post not save correct try next time"})
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]string{"error": "post save good"})
+	json.NewEncoder(w).Encode(map[string]string{"status": "post save good"})
 }
 
-func SaveImg(file io.Reader) (string, error) {
+func SaveImg(file multipart.File, filehedre *multipart.FileHeader) (string, error) {
 	uidImg, err := uuid.NewV4()
 	if err != nil {
 		return "", err
 	}
-	nameFiel := filepath.Join("userImg", uidImg.String())
-	saveFiel, err := os.Create(nameFiel)
+	nameFiel := filepath.Join("userImg", uidImg.String()+filepath.Ext(filehedre.Filename))
+	saveFile, err := os.Create(nameFiel)
 	if err != nil {
 		return "", err
 	}
-	io.Copy(saveFiel, file)
-	return nameFiel, nil
-}
-
-func HandulPost(r *http.Request, post *utils.Post) bool {
-	post.Title = strings.TrimSpace(r.FormValue("title"))
-	post.Contant = strings.TrimSpace(r.FormValue("contant"))
-	json.NewDecoder(strings.NewReader(r.FormValue("categories"))).Decode(&post.Categories)
-	return post.Title == "" || post.Contant == "" || len(post.Categories) == 0
+	defer saveFile.Close()
+	_, err = io.Copy(saveFile, file)
+	fmt.Println(err)
+	return nameFiel, err
 }

@@ -23,6 +23,9 @@ type BD interface {
 	Insert(utils.User) (int, error)
 	Select(string, string) (int, error)
 	CraeteSession(int, string) error
+	HandulPost(*http.Request, *utils.Post) bool
+	ValidCateg([]string) []int
+	DelectSeoin(string) error
 }
 
 type Apiserve struct {

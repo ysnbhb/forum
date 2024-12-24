@@ -15,14 +15,15 @@ type ErrorData struct {
 }
 
 type Post struct {
-	Id         int      `json:"id"`
-	UserName   string   `json:"userName"`
-	Title      string   `json:"title"`
-	Contant    string   `json:"contant"`
-	ImgUrl     any      `json:"img"`
-	Categories []string `json:"categories"`
-	Reaction   Reaction `json:"reaction"`
-	Date       string   `json:"date"`
+	Id            int      `json:"id"`
+	UserName      string   `json:"userName"`
+	Title         string   `json:"title"`
+	Contant       string   `json:"contant"`
+	ImgUrl        any      `json:"img"`
+	Categories    []string `json:"categories"`
+	Reaction      Reaction `json:"reaction"`
+	Idscategories []int    `json:"-"`
+	Date          string   `json:"date"`
 }
 
 type Reaction struct {

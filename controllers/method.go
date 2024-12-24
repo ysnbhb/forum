@@ -113,3 +113,11 @@ func (db *Date) TakeId(secion string) int {
 	}
 	return id
 }
+
+func (db *Date) DelectSeoin(token string) error {
+	query := `
+		DELETE FROM session WHERE user_id = ?
+	`
+	_, err := db.DB.Exec(query, token)
+	return err
+}

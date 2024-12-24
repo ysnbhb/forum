@@ -24,7 +24,17 @@ func Page(w http.ResponseWriter, r *http.Request) {
 	tmp.Execute(w, nil)
 }
 
-func LogOut(w http.ResponseWriter, r *http.Request) {
+func (api *Apiserve) LogOut(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("token")
+	if err != nil {
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Found", "The page you are looking for is not available!", nil)
+		return
+	}
+	err = api.DB.DelectSeoin(cookie.Value)
+	if err != nil {
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Found", "The page you are looking for is not available!", nil)
+		return
+	}
 	http.SetCookie(w, &http.Cookie{
 		HttpOnly: false,
 		Value:    "",

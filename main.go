@@ -20,7 +20,7 @@ func main() {
 	http.HandleFunc("/signup", api.PageSingUp)
 	http.HandleFunc("/", server.Page)
 	http.HandleFunc("/signin", api.PageSingIn)
-	http.HandleFunc("/logout", server.LogOut)
+	http.HandleFunc("/logout", api.LogOut)
 	http.HandleFunc("/user/signup", api.DB.SingUp)
 	http.HandleFunc("/user/signin", api.DB.SingIn)
 	http.HandleFunc("/user/exist", api.DB.Exist)

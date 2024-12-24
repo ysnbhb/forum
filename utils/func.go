@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
-	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"regexp"
 	"unicode"
@@ -101,17 +101,11 @@ func IsValidPassword(password string) bool {
 	return hasUpper && hasLower && hasDigit && hasSpecial
 }
 
-func IsImage(filePath io.Reader) (bool, error) {
-	buffer := make([]byte, 512)
-	_, err := filePath.Read(buffer)
-	if err != nil {
-		return false, err
+func IsImage(handler *multipart.FileHeader) bool {
+	typeimg := handler.Header.Get("Content-Type")
+	if len(typeimg) > 6 && typeimg[:6] != "image/" {
+		return false
+	} else {
+		return true
 	}
-	contentType := http.DetectContentType(buffer)
-	fmt.Println("Content Type:", contentType)
-	return contentType == "image/jpeg" ||
-		contentType == "image/png" ||
-		contentType == "image/gif" ||
-		contentType == "image/webp" ||
-		contentType == "image/svg+xml", nil
 }
