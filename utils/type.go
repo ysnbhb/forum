@@ -1,7 +1,5 @@
 package utils
 
-import "time"
-
 type User struct {
 	User_name string `json:"user_name"`
 	Email     string `json:"email"`
@@ -35,9 +33,9 @@ type Reaction struct {
 }
 
 type Commant struct {
-	Id       int       `json:"id"`
-	UserName string    `json:"userName"`
-	Contant  string    `json:"contant"`
-	Reaction Reaction  `json:"reaction"`
-	Date     time.Time `json:"date"`
+	Id       int      `json:"id"`
+	UserName string   `json:"userName"`
+	Contant  string   `json:"contant"`
+	Reaction Reaction `json:"reaction"`
+	Date     string   `json:"date"`
 }
