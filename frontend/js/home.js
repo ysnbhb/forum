@@ -12,4 +12,4 @@ async function Hande() {
   addLastPost();
 }
 Hande();
-ClosePop();
+// ClosePop();

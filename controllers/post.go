@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"forum/utils"
 
@@ -166,13 +167,18 @@ func (db *Date) AddPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	categories := strings.Join(post.Categories, " ,")
-	_, err = db.DB.Exec(query, id, post.Title, post.Contant, post.ImgUrl, categories)
+	res, err := db.DB.Exec(query, id, post.Title, post.Contant, post.ImgUrl, categories)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{"error": "post not save correct try next time"})
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]string{"status": "post save good"})
+	Postid, _ := res.LastInsertId()
+	post.UserName, _ = db.GetName(id)
+	post.Date = time.Now().Format("2006-01-02 15:04:05")
+	post.Id = int(Postid)
+	db.SaveCategories(post.Id, post.Idscategories)
+	json.NewEncoder(w).Encode(post)
 }
 
 func SaveImg(file multipart.File, filehedre *multipart.FileHeader) (string, error) {

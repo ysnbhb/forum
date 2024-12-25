@@ -74,14 +74,7 @@ func (db *Date) CraeteSession(userid int, session string) error {
 
 func (db *Date) TakeName(w http.ResponseWriter, str string) bool {
 	id := db.TakeId(str)
-	if id < 1 {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(map[string]string{"error": "user not Found"})
-		return false
-	}
-	userName := ""
-	query := `SELECT (user_name) FROM user WHERE id = ?`
-	err := db.DB.QueryRow(query, id).Scan(&userName)
+	userName, err := db.GetName(id)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]string{"error": "user not Found"})
@@ -90,6 +83,13 @@ func (db *Date) TakeName(w http.ResponseWriter, str string) bool {
 	w.WriteHeader(http.StatusFound)
 	json.NewEncoder(w).Encode(map[string]string{"userName": userName})
 	return true
+}
+
+func (db *Date) GetName(id int) (string, error) {
+	userName := ""
+	query := `SELECT (user_name) FROM user WHERE id = ?`
+	err := db.DB.QueryRow(query, id).Scan(&userName)
+	return userName, err
 }
 
 func (db *Date) LastID(w http.ResponseWriter, r *http.Request) {

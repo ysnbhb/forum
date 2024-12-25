@@ -71,12 +71,6 @@ function HandelHearder(islogin) {
     popup.className = "PrLog";
     popup.id = "PrLog";
     popup.innerHTML = `
-  
-      <div class="classic">
-        <a href="/profile"> <span class="material-symbols-outlined"> account_circle </span>
-            <p>profile</p>
-        </a>
-      </div>
       <div class="classic">
         <a href="/logout"><span class="material-symbols-outlined">logout</span><p>logout</p></a>
       </div>
@@ -91,7 +85,7 @@ function HandelHearder(islogin) {
         >`;
 
     ShowPop(div);
-    ctreatAddpost()
+    ctreatAddpost();
   } else {
     div.className = "nolog_link";
     div.innerHTML = `
@@ -105,7 +99,7 @@ function HandelHearder(islogin) {
   }
   header.append(div);
   document.body.prepend(header);
-	return
+  return;
 }
 
 async function addLastPost() {
@@ -154,8 +148,12 @@ async function addLastPost() {
 }
 
 function getCheckedCheckboxes() {
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');  
-  const checkedValues = Array.from(checkboxes).map(checkbox => checkbox.value); 
+  const checkboxes = document.querySelectorAll(
+    'input[type="checkbox"]:checked'
+  );
+  const checkedValues = Array.from(checkboxes).map(
+    (checkbox) => checkbox.value
+  );
   return checkedValues;
 }
 
@@ -167,4 +165,11 @@ async function getCgt() {
   });
 }
 
-export { ShowPop, ClosePop, HandelHearder, addLastPost, getCgt  , getCheckedCheckboxes};
+export {
+  ShowPop,
+  ClosePop,
+  HandelHearder,
+  addLastPost,
+  getCgt,
+  getCheckedCheckboxes,
+};

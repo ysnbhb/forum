@@ -174,7 +174,7 @@ async function addPost(div) {
         method: "POST",
         body: form,
       });
-      console.log(response);
+      console.log(response.json());
       div.remove();
       return true;
     } catch (error) {

@@ -34,3 +34,13 @@ func (db *Date) GetReaction(r *http.Request, id int, typ string) utils.Reaction 
 	db.DB.QueryRow(query, id, userid).Scan(&reaction.Type)
 	return reaction
 }
+
+func (db *Date) SaveCategories(postid int, categories []int) {
+	query := `
+		INSERT INTO categories_post (categorie_id , post_id)
+		VALUES(? , ?)
+	`
+	for _, id := range categories {
+		db.DB.Exec(query, id, postid)
+	}
+}

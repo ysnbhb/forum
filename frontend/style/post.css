@@ -1,0 +1,149 @@
+.content {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2b7ac938;
+  margin-top: 62px;
+  flex-wrap: wrap;
+}
+
+.allPost {
+  margin-top: 10px;
+  width: 50%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.articles button {
+  background-color: #eee;
+  color: #313030;
+  /* border: none; */
+  border-radius: 11px;
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.articles .like:hover {
+  background-color: #0374ec;
+}
+
+.articles .dislike:hover {
+  background-color: #ff0015;
+}
+
+.articles .commant:hover {
+  background: linear-gradient(to right, #007bff, #00aaff, #00ccff);
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+.reaction {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.articles img {
+  text-align: center;
+  display: flex;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.articles {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.articles .title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.articles .contant {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.uerImg {
+}
+@media (max-width: 650px) {
+  main.content {
+    padding: 10px;
+  }
+
+  .articles {
+    padding: 15px;
+  }
+
+  .articles .title {
+    font-size: 20px;
+  }
+
+  .articles .contant {
+    font-size: 14px;
+  }
+
+  .articles button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  .allPost {
+    width: 65%;
+  }
+}
+
+@media (max-width: 450px) {
+  main.content {
+    padding: 10px;
+  }
+
+  .articles {
+    padding: 15px;
+  }
+
+  .articles img {
+    max-height: 200px;
+  }
+
+  .articles .title {
+    font-size: 20px;
+  }
+
+  .articles .contant {
+    font-size: 14px;
+  }
+
+  .articles button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  .allPost {
+    width: 95%;
+  }
+}
