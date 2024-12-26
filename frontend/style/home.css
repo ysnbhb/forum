@@ -483,7 +483,6 @@ label {
   color: red;
   text-align: center;
   height: 0;
-  visibility: hidden;
   transition: all 0.3s;
 }
 

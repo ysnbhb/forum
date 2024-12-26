@@ -129,7 +129,7 @@ async function addLastPost() {
       console.error("Error fetching last ID:", error, errorSErve);
       errorSErve++;
 
-      if (errorSErve > 20) {
+      if (errorSErve > 10) {
         if (!document.getElementById("interErro")) {
           const div = document.createElement("div");
           div.innerHTML = "Check your internet connection!";

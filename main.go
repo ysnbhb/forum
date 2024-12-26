@@ -26,6 +26,7 @@ func main() {
 	http.HandleFunc("/user/exist", api.DB.Exist)
 	http.HandleFunc("/post/lastId", api.DB.LastID)
 	http.HandleFunc("/frontend/", server.Server)
+	http.HandleFunc("/userImg/", server.Server)
 	// api
 	http.HandleFunc("/api/getCategorie", api.DB.GetCtg)
 	http.HandleFunc("/api/posts", api.DB.GetPost)

@@ -1,4 +1,5 @@
 import { getCgt, getCheckedCheckboxes } from "./homemudul.js";
+import { CreateDiv } from "./post.js";
 
 function showPss(idButtom, idPassword) {
   let hiden = true;
@@ -147,11 +148,11 @@ async function addPost(div) {
     const categories = getCheckedCheckboxes();
     if (categories.length === 0) {
       err.innerText = ` please aprove  categorie of this post`;
-      // err.style.color = "red";
-      // err.style.height = "30px";
-      // err.style.width = "90%";
-      // err.style.textAlign = "center";
-      err.classList.add("error-visible");
+      err.style.color = "red";
+      err.style.height = "30px";
+      err.style.width = "90%";
+      err.style.textAlign = "center";
+      // err.classList.add("error-visible");
 
       return;
     } else {
@@ -162,7 +163,7 @@ async function addPost(div) {
       img.focus();
       return false;
     }
-
+    const allpost = document.getElementById("allPost");
     const form = new FormData();
     form.append("img", img.files[0]);
     form.append("title", title.value);
@@ -174,10 +175,22 @@ async function addPost(div) {
         method: "POST",
         body: form,
       });
-      console.log(response.json());
-      div.remove();
+      // console.log(response.json());
+      const post = await response.json();
+      if (response.ok) {
+        const div = CreateDiv(post);
+        allpost.prepend(div);
+        div.remove();
+      } else {
+        err.innerHTML = post.error;
+      }
       return true;
     } catch (error) {
+      err.innerText = `Check your internet connection!`;
+      err.style.color = "red";
+      err.style.height = "30px";
+      err.style.width = "90%";
+      err.style.textAlign = "center";
       console.error("Error:", error);
       alert("An error occurred. Please try again.");
       return false; // Return false if there was an error

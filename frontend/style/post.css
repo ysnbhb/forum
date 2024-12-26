@@ -19,7 +19,9 @@
   align-items: center;
 }
 
-.articles button {
+.articles button,
+.dislike,
+.like {
   background-color: #eee;
   color: #313030;
   /* border: none; */
@@ -37,6 +39,14 @@
 
 .articles .dislike:hover {
   background-color: #ff0015;
+}
+
+.likes {
+  background-color: #0374ec !important ;
+}
+
+.dislikes {
+  background-color: #ff0015 !important;
 }
 
 .articles .commant:hover {
@@ -75,23 +85,65 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 90%;
 }
 
 .articles .title {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 500;
   color: #333;
   margin-bottom: 10px;
+  word-break: break-word;
 }
 
 .articles .contant {
   font-size: 16px;
   color: #555;
   margin-bottom: 15px;
+  word-break: break-word;
+}
+
+.date {
+  width: 100px;
+  text-align: center;
+  color: #000000ba;
 }
 
 .uerImg {
+  text-align: center;
+  display: flex;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin: 15px;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
+
+.postInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.uerName {
+  font-size: larger;
+}
+
+.type {
+  border: 0.2px solid #0201019e;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 10px;
+  background: #c9c0c0a3;
+  margin-right: 5px;
+}
+.cgt {
+  display: flex;
+  justify-content: start;
+}
+
 @media (max-width: 650px) {
   main.content {
     padding: 10px;
@@ -99,6 +151,7 @@
 
   .articles {
     padding: 15px;
+    width: 90%;
   }
 
   .articles .title {

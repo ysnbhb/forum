@@ -36,8 +36,18 @@ func (db *Date) LikePost(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "invalid post id"})
 		return
 	}
-	like := db.CheckLIke(postid, id, "post_id", "likes")
-	dilike := db.CheckLIke(postid, id, "post_id", "dislikes")
+	like, err := db.CheckLIke(postid, id, "likes", "post_id")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "error in server"})
+		return
+	}
+	dilike, err := db.CheckLIke(postid, id, "dislikes", "post_id")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "error in server"})
+		return
+	}
 	if reaction.Type == "likes" {
 		if dilike {
 			db.UpdateLike(postid, id, "post_id", "likes")
@@ -88,8 +98,18 @@ func (db *Date) LikeCommat(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "invalid post id"})
 		return
 	}
-	like := db.CheckLIke(postid, id, "comment_id", "likes")
-	dilike := db.CheckLIke(postid, id, "comment_id", "dislikes")
+	exist := db.CheckPost(postid)
+	if exist != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "post not found"})
+		return
+	}
+
+	like, err := db.CheckLIke(postid, id, "likes", "comment_id")
+	fmt.Println(err)
+
+	dilike, err := db.CheckLIke(postid, id, "dislikes", "comment_id")
+	fmt.Println(err)
 	if reaction.Type == "likes" {
 		if dilike {
 			db.UpdateLike(postid, id, "comment_id", "likes")
@@ -113,24 +133,32 @@ func (db *Date) LikeCommat(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (db *Date) CheckLIke(id, uerId int, tpy, which string) bool {
+func (db *Date) CheckLIke(id, userId int, typ, column string) (bool, error) {
 	var like bool
+
+	// Validate `column` to prevent SQL injection
+	if column != "post_id" && column != "comment_id" {
+		return false, fmt.Errorf("invalid column name: %s", column)
+	}
 	query := fmt.Sprintf(`
 		SELECT EXISTS (
 			SELECT 1 
 			FROM reaction
 			WHERE %s = ? AND 
-			user_id = ? 
-			WHERE type = ?
+			user_id = ? AND 
+			type = ?
 		)
-	`, which)
-	db.DB.QueryRow(query, id, uerId, tpy).Scan(&like)
-	return like
+	`, column)
+	err := db.DB.QueryRow(query, id, userId, typ).Scan(&like)
+	if err != nil {
+		return false, fmt.Errorf("query execution error: %w", err)
+	}
+	return like, nil
 }
 
 func (db *Date) UpdateLike(id, userid int, which, typ string) {
 	query := fmt.Sprintf(`
-		UPDATE INTO reaction
+		UPDATE  reaction
 		SET type = ?
 		WHERE %s = ?
 		AND user_id = ?
@@ -151,4 +179,14 @@ func (db *Date) DelecttLike(id, userid int, which string) {
 		DELETE FROM reaction WHERE %s = ? AND user_id = ?
 	`, which)
 	db.DB.Exec(query, id, userid)
+}
+
+func (db *Date) CheckPost(id int) error {
+	query := `
+		SELECT EXISTS (
+			SELECT 1 FORM post WHERE id = ?
+		)
+	`
+	exist := false
+	return db.DB.QueryRow(query).Scan(&exist)
 }

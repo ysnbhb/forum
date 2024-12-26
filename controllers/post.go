@@ -44,7 +44,7 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
         post.id DESC
     LIMIT ? OFFSET ?
 `
-	row, err := db.DB.Query(query, 20, "0")
+	row, err := db.DB.Query(query, 20, "10")
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
