@@ -14,6 +14,7 @@ func (db *Date) GetCommat(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusMethodNotAllowed)})
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	postid := r.URL.Query().Get("postid")
 	offset := r.URL.Query().Get("offset")
 	query := `

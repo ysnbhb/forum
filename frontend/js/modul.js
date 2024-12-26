@@ -178,8 +178,8 @@ async function addPost(div) {
       // console.log(response.json());
       const post = await response.json();
       if (response.ok) {
-        const div = CreateDiv(post);
-        allpost.prepend(div);
+        const postdiv = CreateDiv(post);
+        allpost.prepend(postdiv);
         div.remove();
       } else {
         err.innerHTML = post.error;
