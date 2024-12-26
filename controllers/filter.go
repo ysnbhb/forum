@@ -12,7 +12,6 @@ import (
 
 func (db *Date) FilterWithCategory(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-
 	if r.Method != http.MethodGet {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
@@ -61,7 +60,7 @@ func (db *Date) FilterWithCategory(w http.ResponseWriter, r *http.Request) {
         LIMIT ? OFFSET ?;`
 	rows, err := db.DB.Query(query, categoryID, limitInt, offsetInt)
 	if err != nil {
-		fmt.Println("SQL Query Error:", err)
+		fmt.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
@@ -73,7 +72,203 @@ func (db *Date) FilterWithCategory(w http.ResponseWriter, r *http.Request) {
 		categories := ""
 
 		if err := rows.Scan(&post.UserName, &post.Id, &post.Title, &post.Contant, &post.Date, &post.ImgUrl, &categories); err != nil {
-			fmt.Println("Error scanning row:", err)
+			fmt.Println(err)
+			continue
+		}
+
+		post.Categories = strings.Split(categories, ",")
+		post.Reaction = db.GetReaction(r, post.Id, "post_id")
+		posts = append(posts, post)
+	}
+
+	if err := rows.Err(); err != nil {
+		fmt.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	if err := json.NewEncoder(w).Encode(posts); err != nil {
+		fmt.Println("Error encoding JSON:", err)
+	}
+}
+
+func (db *Date) GetIdCateg(str string) int {
+	categ := 0
+	db.DB.QueryRow(`SELECT id FROM categories WHERE name_categorie  = ?`, str).Scan(&categ)
+	return categ
+}
+
+func (db *Date) FilterMyPost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusMethodNotAllowed)})
+		return
+	}
+	cookie, err := r.Cookie("token")
+	if err != nil {
+		w.WriteHeader(http.StatusNonAuthoritativeInfo)
+		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusNonAuthoritativeInfo)})
+		return
+	}
+	userIs := db.TakeId(cookie.Value)
+	if userIs < 1 {
+		w.WriteHeader(http.StatusNonAuthoritativeInfo)
+		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusNonAuthoritativeInfo)})
+		return
+	}
+	limit := r.URL.Query().Get("limit")
+	offset := r.URL.Query().Get("offset")
+
+	limitInt := 20
+	offsetInt := 0
+	if l, err := strconv.Atoi(limit); err == nil {
+		limitInt = l
+	}
+	if o, err := strconv.Atoi(offset); err == nil {
+		offsetInt = o
+	}
+	posts := []utils.Post{}
+	query := `
+    SELECT 
+        user.user_name, 
+        post.id, 
+        post.title, 
+        post.contant, 
+        post.create_date , 
+		post.img ,
+		post.categories
+    FROM 
+        user
+    INNER JOIN 
+        post 
+    ON 
+        post.user_id = user.id
+	WHERE
+		post.user_id=  ?
+    ORDER BY 
+        post.id DESC
+    LIMIT ? OFFSET ?
+`
+	row, err := db.DB.Query(query, userIs, limitInt, offsetInt)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+	defer row.Close()
+
+	for row.Next() {
+		Categories := ""
+		post := utils.Post{}
+		if err := row.Scan(&post.UserName, &post.Id, &post.Title, &post.Contant, &post.Date, &post.ImgUrl, &Categories); err != nil {
+			fmt.Println(err)
+			continue
+		}
+		post.Categories = strings.Split(Categories, " ,")
+		post.Reaction = db.GetReaction(r, post.Id, "post_id")
+		posts = append(posts, post)
+	}
+
+	if err := row.Err(); err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
+	if err := json.NewEncoder(w).Encode(posts); err != nil {
+		fmt.Println("Error encoding JSON:", err)
+	}
+}
+
+func (db *Date) AllPost(w http.ResponseWriter, r *http.Request) {
+	filterby := r.URL.Query().Get("filterby")
+	if filterby == "all" || filterby == "" {
+		db.GetPost(w, r)
+	} else if filterby == "mypost" {
+		db.FilterMyPost(w, r)
+	} else if filterby == "likedpost" {
+		db.FilterLikedPost(w, r)
+	} else if filterby == "category" {
+		db.FilterWithCategory(w, r)
+	} else {
+		w.Header().Set("Content-type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusBadRequest)})
+		return
+	}
+}
+
+func (db *Date) FilterLikedPost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	if r.Method != http.MethodGet {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		return
+	}
+
+	limit := r.URL.Query().Get("limit")
+	offset := r.URL.Query().Get("offset")
+
+	limitInt := 20
+	offsetInt := 0
+	if l, err := strconv.Atoi(limit); err == nil {
+		limitInt = l
+	}
+	if o, err := strconv.Atoi(offset); err == nil {
+		offsetInt = o
+	}
+	cookie, err := r.Cookie("token")
+	if err != nil {
+		w.WriteHeader(http.StatusNonAuthoritativeInfo)
+		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusNonAuthoritativeInfo)})
+		return
+	}
+	userIs := db.TakeId(cookie.Value)
+	if userIs < 1 {
+		w.WriteHeader(http.StatusNonAuthoritativeInfo)
+		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusNonAuthoritativeInfo)})
+		return
+	}
+	query := `
+		SELECT 
+			user.user_name, 
+			post.id, 
+			post.title, 
+			post.contant, 
+			post.create_date, 
+			post.img, 
+			post.categories
+		FROM 
+			user
+		INNER JOIN 
+			post 
+		ON 
+			post.user_id = user.id
+		INNER JOIN 
+			reaction 
+		ON 
+			reaction.post_id = post.id
+		WHERE 
+			reaction.user_id = ? AND reaction.type = ?
+		ORDER BY 
+			post.id DESC
+		LIMIT ? OFFSET ?;
+	`
+	rows, err := db.DB.Query(query, userIs, "likes", limitInt, offsetInt)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	posts := []utils.Post{}
+	for rows.Next() {
+		post := utils.Post{}
+		categories := ""
+
+		if err := rows.Scan(&post.UserName, &post.Id, &post.Title, &post.Contant, &post.Date, &post.ImgUrl, &categories); err != nil {
+			fmt.Println(err)
 			continue
 		}
 
@@ -87,20 +282,9 @@ func (db *Date) FilterWithCategory(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-
-	if len(posts) == 0 {
-		fmt.Println("No results found.")
-		http.Error(w, "No results found", http.StatusNotFound)
-		return
-	}
-
 	if err := json.NewEncoder(w).Encode(posts); err != nil {
 		fmt.Println("Error encoding JSON:", err)
 	}
 }
 
-func (db *Date) GetIdCateg(str string) int {
-	categ := 0
-	db.DB.QueryRow(`SELECT id WHERE name_categorie  = ?`, str).Scan(&categ)
-	return categ
-}
+

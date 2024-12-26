@@ -24,6 +24,17 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusMethodNotAllowed)})
 		return
 	}
+	limit := r.URL.Query().Get("limit")
+	offset := r.URL.Query().Get("offset")
+
+	limitInt := 20
+	offsetInt := 0
+	if l, err := strconv.Atoi(limit); err == nil {
+		limitInt = l
+	}
+	if o, err := strconv.Atoi(offset); err == nil {
+		offsetInt = o
+	}
 	posts := []utils.Post{}
 	query := `
     SELECT 
@@ -44,7 +55,7 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
         post.id DESC
     LIMIT ? OFFSET ?
 `
-	row, err := db.DB.Query(query, 20, "10")
+	row, err := db.DB.Query(query, limitInt, offsetInt)
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -143,7 +154,7 @@ func (db *Date) AddPost(w http.ResponseWriter, r *http.Request) {
 	query := `
 	 	INSERT INTO post(user_id , title , contant , img , categories)
 		VALUES (? ,? ,? , ? , ?)
-	 `
+	`
 	post := utils.Post{}
 	file, mut, err := r.FormFile("img")
 	if err == nil {
