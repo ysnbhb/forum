@@ -1,22 +1,29 @@
 export function CreateDiv(post) {
   const articles = document.createElement("article");
   articles.className = "articles";
+
   const postInf = document.createElement("div");
   postInf.className = "postInfo";
+
   const h2 = document.createElement("h2");
   h2.className = "uerName";
   h2.innerText = post.userName;
+
   const span = document.createElement("span");
   span.className = "date";
   span.innerText = post.date;
+
   postInf.append(h2, span);
   articles.append(postInf);
+
   const h4 = document.createElement("h4");
   h4.className = "title";
   h4.innerText = post.title;
+
   const div = document.createElement("div");
   div.className = "contant";
   div.innerText = post.contant;
+
   articles.append(h4, div);
   if (post.img) {
     const imgdiv = document.createElement("div");
@@ -26,12 +33,14 @@ export function CreateDiv(post) {
     imgdiv.append(src);
     articles.append(imgdiv);
   }
+
   articles.append(CreateCtg(post.categories));
   const btndiv = document.createElement("div");
   btndiv.className = "bottom";
+
   const reaction = document.createElement("div");
   reaction.className = "reaction";
-  console.log(post.id);
+  // console.log(post.id);
   const [like, dislike] = HandulLike(
     post.reaction.type,
     post.reaction.numLike,
@@ -40,6 +49,7 @@ export function CreateDiv(post) {
     post.id
   );
   reaction.append(like, dislike);
+
   const commant = document.createElement("button");
   commant.className = "commant";
   commant.innerHTML = `
@@ -50,15 +60,20 @@ export function CreateDiv(post) {
   return articles;
 }
 
-async function FetchPost() {
+async function FetchPost(offset) {
   const allpost = document.getElementById("allPost");
   try {
-    const res = await fetch("/api/posts");
+    const res = await fetch(`/api/posts?offset=${offset}`);
     const posts = await res.json();
+    if (posts.length === 0 && offset == 0) {
+      document.getElementById("content").style.display = "none";
+      return;
+    }
     for (let i = 0; i < posts.length; i++) {
       const post = CreateDiv(posts[i]);
       allpost.append(post);
     }
+    return posts.length;
   } catch (err) {}
 }
 
@@ -75,7 +90,7 @@ function CreateCtg(categories) {
 }
 
 function HandulLike(type, numlike, numdislike, islogin, postid) {
-  console.log(postid);
+  // console.log(postid);
   const likebtn = document.createElement("button");
   const dislikebtn = document.createElement("button");
   likebtn.className = "like";
@@ -134,10 +149,30 @@ function HandulLike(type, numlike, numdislike, islogin, postid) {
     fetch(`/api/post/like?postid=${postid}&type=dislikes`, {
       method: "POST",
     }).then((res) => {
-      console.log(res);
+      // console.log(res);
     });
   });
   return [likebtn, dislikebtn];
 }
 
-FetchPost();
+FetchPost(0);
+
+function Inf() {
+  let offset = 20;
+  let lenghtpost;
+  window.addEventListener("scrollend", async () => {
+    let windowHight = window.innerHeight;
+    let scrol = window.scrollY;
+    if (scrol + windowHight > document.body.scrollHeight - 1000) {
+      if (lenghtpost === 0) {
+        window.removeEventListener("scroll", Inf);
+        return;
+      }
+      lenghtpost = await FetchPost(offset);
+      offset += 20;
+      console.log(offset);
+    }
+  });
+}
+
+Inf();

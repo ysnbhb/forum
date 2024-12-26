@@ -169,7 +169,7 @@ header {
   width: 100%;
   display: flex;
   position: absolute;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   background: linear-gradient(to right, #f7bcc6, #c5647594);
 }
@@ -208,7 +208,9 @@ header {
 .nolog_link {
   width: 24%;
   display: flex;
-  justify-content: space-around;
+  justify-content: end;
+  gap: 40px;
+
   align-items: center;
 }
 
@@ -454,8 +456,9 @@ label {
     display: inline;
   }
   .nolog_link {
-    margin-right: 10px;
+    margin-right: 26px;
     width: 45%;
+    justify-content: space-around;
   }
 }
 

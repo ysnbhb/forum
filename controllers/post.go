@@ -35,6 +35,7 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
 	if o, err := strconv.Atoi(offset); err == nil {
 		offsetInt = o
 	}
+	fmt.Println(offset, limit)
 	posts := []utils.Post{}
 	query := `
     SELECT 
