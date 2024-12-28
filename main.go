@@ -35,11 +35,7 @@ func main() {
 	http.HandleFunc("/api/post/like", DB.LikePost)
 	http.HandleFunc("/api/commant/like", DB.LikeCommat)
 	http.HandleFunc("/api/commant", DB.GetCommat)
-	// http.HandleFunc("/api/post/filter", DB.FilterWithCategory)
-	// http.HandleFunc("/api/post/mypost", DB.FilterMyPost)
-	// http.HandleFunc("/api/post/likeed", DB.FilterLikedPost)
-
-	// run server
+	http.HandleFunc("/api/addcommat", DB.AddCommat)
 	println("server is run in http://localhost:8081/")
 	err = http.ListenAndServe(":8081", nil)
 	if err != nil {

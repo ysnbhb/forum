@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"forum/utils"
 )
@@ -94,21 +95,32 @@ func (db *Date) AddCommat(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "invalid post id"})
 		return
 	}
+	commant := utils.Commant{}
 	exist := db.CheckPost(postid)
 	if exist != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "post not found"})
 		return
 	}
-	contat := strings.TrimSpace(r.FormValue("contant"))
-	if contat == "" {
+	commant.Contant = strings.TrimSpace(r.FormValue("contant"))
+	if commant.Contant == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "no contant"})
 		return
 	}
+	commant.UserName, _ = db.GetName(id)
 	query := `
 	 	INSERT INTO commant(user_id , post_id , contant)
 		VALUES (? ,? ,?)
 	`
-	db.DB.Exec(query, id, postid, contat)
+	commant.Date = time.Now().Format("2006-01-02 15:04:05")
+	res, err := db.DB.Exec(query, id, postid, commant.Contant)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusInternalServerError)})
+		return
+	}
+	Postid, _ := res.LastInsertId()
+	commant.Id = int(Postid)
+	json.NewEncoder(w).Encode(commant)
 }

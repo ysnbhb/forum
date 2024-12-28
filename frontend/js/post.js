@@ -1,4 +1,6 @@
-export function CreateDiv(post) {
+import { ClosePop } from "./homemudul.js";
+
+export function CreateDiv(post, islogin, ispopup) {
   const articles = document.createElement("article");
   articles.className = "articles";
 
@@ -45,22 +47,27 @@ export function CreateDiv(post) {
     post.reaction.type,
     post.reaction.numLike,
     post.reaction.numDisLike,
-    null,
+    islogin,
     post.id
   );
   reaction.append(like, dislike);
-
-  const commant = document.createElement("button");
-  commant.className = "commant";
-  commant.innerHTML = `
-      <span class="material-symbols-outlined"> comment </span>
-`;
-  btndiv.append(reaction, commant);
+  btndiv.append(reaction);
+  if (!ispopup) {
+    const commant = document.createElement("button");
+    commant.className = "commant";
+    commant.innerHTML = `
+        <span class="material-symbols-outlined"> comment </span>
+  `;
+    commant.addEventListener("click", () => {
+      HandulPostCommant(islogin, post.id);
+    });
+    btndiv.append(commant);
+  }
   articles.append(btndiv);
   return articles;
 }
 
-async function FetchPost(offset) {
+export async function FetchPost(offset, islogin) {
   const allpost = document.getElementById("allPost");
   try {
     const res = await fetch(`/api/posts?offset=${offset}`);
@@ -70,7 +77,7 @@ async function FetchPost(offset) {
       return;
     }
     for (let i = 0; i < posts.length; i++) {
-      const post = CreateDiv(posts[i]);
+      const post = CreateDiv(posts[i], islogin);
       allpost.append(post);
     }
     return posts.length;
@@ -116,7 +123,13 @@ function HandulLike(type, numlike, numdislike, islogin, postid) {
   dislikespan.innerHTML = numdislike;
   likebtn.append(likespan);
   dislikebtn.append(dislikespan);
+  let close = true;
   likebtn.addEventListener("click", () => {
+    if (!islogin) {
+      console.log(islogin);
+      ClosePop(close);
+      return;
+    }
     if (likebtn.classList.length == 2) {
       likebtn.classList.remove("likes");
       numlike--;
@@ -133,6 +146,11 @@ function HandulLike(type, numlike, numdislike, islogin, postid) {
     fetch(`/api/post/like?postid=${postid}&type=likes`, { method: "POST" });
   });
   dislikebtn.addEventListener("click", () => {
+    if (!islogin) {
+      console.log(islogin);
+      ClosePop(close);
+      return;
+    }
     if (dislikebtn.classList.length == 2) {
       dislikebtn.classList.remove("dislikes");
       numdislike--;
@@ -155,9 +173,9 @@ function HandulLike(type, numlike, numdislike, islogin, postid) {
   return [likebtn, dislikebtn];
 }
 
-FetchPost(0);
+// FetchPost(0);
 
-function Inf() {
+export function Inf(islogin) {
   let offset = 20;
   let lenghtpost;
   window.addEventListener("scrollend", async () => {
@@ -168,11 +186,32 @@ function Inf() {
         window.removeEventListener("scroll", Inf);
         return;
       }
-      lenghtpost = await FetchPost(offset);
+      lenghtpost = await FetchPost(offset, islogin);
       offset += 20;
       console.log(offset);
     }
   });
 }
 
-Inf();
+async function HandulPostCommant(islogin, postid) {
+  const postopop = document.getElementById("postopop");
+  postopop.innerHTML = `
+     <button class="close" id="closepost">
+        <span class="material-symbols-outlined"> close </span>
+      </button>
+  `;
+  const res = await fetch(`/api/post?postid=${postid}`);
+  const post = await res.json();
+  const div = CreateDiv(post, islogin, true);
+  postopop.append(div);
+  postopop.classList.remove("closePose");
+  ClosePost(postopop);
+}
+
+function ClosePost(postpop) {
+  const btn = document.getElementById("closepost");
+  btn.addEventListener("click", () => {
+    postpop.innerHTML = "";
+    postpop.classList.add("closePose");
+  });
+}

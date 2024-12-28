@@ -35,7 +35,6 @@ func (db *Date) GetPost(w http.ResponseWriter, r *http.Request) {
 	if o, err := strconv.Atoi(offset); err == nil {
 		offsetInt = o
 	}
-	fmt.Println(offset, limit)
 	posts := []utils.Post{}
 	query := `
     SELECT 
@@ -107,7 +106,9 @@ func (db *Date) OnePost(w http.ResponseWriter, r *http.Request) {
         post.id, 
         post.title, 
         post.contant, 
-        post.create_date
+        post.create_date, 
+		post.categories ,
+		post.img
     FROM 
         user
     INNER JOIN 
@@ -116,12 +117,14 @@ func (db *Date) OnePost(w http.ResponseWriter, r *http.Request) {
         post.user_id = user.id
     WHERE post.id = ?
 		`
-	err = db.DB.QueryRow(query, postId).Scan(&post.UserName, &post.Id, &post.Title, &post.Contant, &post.Date)
+	categories := ""
+	err = db.DB.QueryRow(query, postId).Scan(&post.UserName, &post.Id, &post.Title, &post.Contant, &post.Date, &categories, &post.ImgUrl)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusNotFound)})
 		return
 	}
+	post.Categories = strings.Split(categories, " ,")
 	if err := json.NewEncoder(w).Encode(post); err != nil {
 		fmt.Println("Error encoding JSON:", err)
 	}

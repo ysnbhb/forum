@@ -16,7 +16,7 @@ func (db *Date) FilterWithCategory(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
-	category := r.URL.Query().Get("category")
+	category := r.URL.Query().Get("filterby")
 	limit := r.URL.Query().Get("limit")
 	offset := r.URL.Query().Get("offset")
 
@@ -189,13 +189,8 @@ func (db *Date) AllPost(w http.ResponseWriter, r *http.Request) {
 		db.FilterMyPost(w, r)
 	} else if filterby == "likedpost" {
 		db.FilterLikedPost(w, r)
-	} else if filterby == "category" {
-		db.FilterWithCategory(w, r)
 	} else {
-		w.Header().Set("Content-type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": http.StatusText(http.StatusBadRequest)})
-		return
+		db.FilterWithCategory(w, r)
 	}
 }
 
@@ -286,5 +281,3 @@ func (db *Date) FilterLikedPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Error encoding JSON:", err)
 	}
 }
-
-

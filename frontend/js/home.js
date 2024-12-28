@@ -1,15 +1,19 @@
 import { exists } from "./modul.js";
 import {
-  ClosePop,
   HandelHearder,
-  ShowPop,
-  addLastPost,
+  notLogpopo,
 } from "./homemudul.js";
+import { FetchPost, Inf } from "./post.js";
 async function Hande() {
   let islogin = false;
   islogin = await exists();
-  HandelHearder(islogin);
-  addLastPost();
+  if (!islogin) {
+    notLogpopo();
+  }
+ await HandelHearder(islogin);
+  FetchPost(20, islogin);
+  Inf(islogin);
+  // addLastPost();
 }
 Hande();
 // ClosePop();

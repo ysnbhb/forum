@@ -20,16 +20,16 @@ function ShowPop(link) {
   });
 }
 
-function ClosePop() {
-  let close = true;
-  const click = document.getElementById("click");
+function ClosePop(close) {
   const btnclose = document.getElementById("close");
   const popup = document.getElementById("popup");
-  click.addEventListener("click", (event) => {
-    event.stopPropagation();
+  if (close) {
     popup.classList.remove("closepop");
-    close = false;
-  });
+  }
+  // click.addEventListener("click", (event) => {
+  //   event.stopPropagation();
+  //   close = false;
+  // });
   btnclose.addEventListener("click", (event) => {
     event.stopPropagation();
     popup.classList.add("closepop");
@@ -46,7 +46,7 @@ function ClosePop() {
   });
 }
 
-function HandelHearder(islogin) {
+async function HandelHearder(islogin) {
   const userName = localStorage.getItem("userName");
   const header = document.createElement("header");
   header.innerHTML = `
@@ -165,6 +165,35 @@ async function getCgt() {
   });
 }
 
+function notLogpopo() {
+  const div = document.createElement("div");
+  div.className = "singpopup";
+  div.classList.add("closepop");
+  div.id = "popup";
+  div.innerHTML = `
+        <button class="close" id="close">
+          <span class="material-symbols-outlined"> close </span>
+        </button>
+        <div class="popup">
+          <div class="sing">You are Not Login :</div>
+          <div class="link-sing">
+            <div class="sing-in">
+              <a href="/signin"
+                ><button class="btn-link">you have account?</button></a
+              >
+            </div>
+
+            <div class="sing-up">
+              <a href="/signup"
+                ><button class="btn-link">you don't have account?</button></a
+              >
+            </div>
+          </div>
+        </div>
+  `;
+  document.body.append(div);
+}
+
 export {
   ShowPop,
   ClosePop,
@@ -172,4 +201,5 @@ export {
   addLastPost,
   getCgt,
   getCheckedCheckboxes,
+  notLogpopo,
 };
