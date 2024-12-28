@@ -9,6 +9,18 @@
   flex-wrap: wrap;
 }
 
+.likecomate {
+  background-color: #eee;
+  color: #313030;
+  /* border: none; */
+  border-radius: 11px;
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
 .allPost {
   margin-top: 10px;
   width: 50%;
@@ -33,11 +45,11 @@
   margin-right: 10px;
 }
 
-.articles .like:hover {
+.like:hover {
   background-color: #0374ec;
 }
 
-.articles .dislike:hover {
+.dislike:hover {
   background-color: #ff0015;
 }
 
@@ -47,10 +59,6 @@
 
 .dislikes {
   background-color: #ff0015 !important;
-}
-
-.articles .commant:hover {
-  background: linear-gradient(to right, #007bff, #00aaff, #00ccff);
 }
 
 .bottom {
@@ -238,6 +246,7 @@
   width: 84%;
   overflow-y: auto;
   border: 1px solid #0000005e;
+  height: 200px;
 }
 
 .commant_post {
@@ -254,6 +263,15 @@
   margin-bottom: 8px;
 }
 
+.showMore {
+  font-size: 11px;
+  color: #000000f2;
+}
+
+.showMore:hover {
+  cursor: pointer;
+}
+
 .Username {
   font-weight: bold;
   font-size: 16px;
@@ -265,7 +283,7 @@
   color: #999;
 }
 
-.commat_tatie {
+.commat_contant {
   font-size: 14px;
   color: #555;
   line-height: 1.5;

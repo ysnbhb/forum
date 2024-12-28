@@ -125,6 +125,7 @@ func (db *Date) OnePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	post.Categories = strings.Split(categories, " ,")
+	post.Reaction = db.GetReaction(r, post.Id, "post_id")
 	if err := json.NewEncoder(w).Encode(post); err != nil {
 		fmt.Println("Error encoding JSON:", err)
 	}
@@ -208,6 +209,5 @@ func SaveImg(file multipart.File, filehedre *multipart.FileHeader) (string, erro
 	}
 	defer saveFile.Close()
 	_, err = io.Copy(saveFile, file)
-	fmt.Println(err)
 	return nameFiel, err
 }

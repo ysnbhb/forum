@@ -36,6 +36,12 @@ func (db *Date) LikePost(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "invalid post id"})
 		return
 	}
+	exist := db.CheckPost(id)
+	if exist != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"error": "invalid post id"})
+		return
+	}
 	like, err := db.CheckLIke(postid, id, "likes", "post_id")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -95,21 +101,19 @@ func (db *Date) LikeCommat(w http.ResponseWriter, r *http.Request) {
 	postid, err := strconv.Atoi(r.FormValue("commateId"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "invalid post id"})
+		json.NewEncoder(w).Encode(map[string]string{"error": "invalid commate id"})
 		return
 	}
-	exist := db.CheckPost(postid)
+	exist := db.CheckCommat(postid)
 	if exist != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "post not found"})
+		json.NewEncoder(w).Encode(map[string]string{"error": "commat not found"})
 		return
 	}
 
-	like, err := db.CheckLIke(postid, id, "likes", "comment_id")
-	fmt.Println(err)
+	like, _ := db.CheckLIke(postid, id, "likes", "comment_id")
 
-	dilike, err := db.CheckLIke(postid, id, "dislikes", "comment_id")
-	fmt.Println(err)
+	dilike, _ := db.CheckLIke(postid, id, "dislikes", "comment_id")
 	if reaction.Type == "likes" {
 		if dilike {
 			db.UpdateLike(postid, id, "comment_id", "likes")
@@ -184,9 +188,17 @@ func (db *Date) DelecttLike(id, userid int, which string) {
 func (db *Date) CheckPost(id int) error {
 	query := `
 		SELECT EXISTS (
-			SELECT 1 FORM post WHERE id = ?
-		)
+    SELECT 1 FROM post WHERE id = ? )
 	`
 	exist := false
-	return db.DB.QueryRow(query).Scan(&exist)
+	return db.DB.QueryRow(query, id).Scan(&exist)
+}
+
+func (db *Date) CheckCommat(id int) error {
+	query := `
+		SELECT EXISTS (
+    SELECT 1 FROM comment WHERE id = ? )
+	`
+	exist := false
+	return db.DB.QueryRow(query, id).Scan(&exist)
 }

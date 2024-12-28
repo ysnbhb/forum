@@ -178,7 +178,7 @@ async function addPost(div) {
       // console.log(response.json());
       const post = await response.json();
       if (response.ok) {
-        const postdiv = CreateDiv(post);
+        const postdiv = CreateDiv(post, true, false);
         allpost.prepend(postdiv);
         div.remove();
       } else {

@@ -42,7 +42,6 @@ export function CreateDiv(post, islogin, ispopup) {
 
   const reaction = document.createElement("div");
   reaction.className = "reaction";
-  // console.log(post.id);
   const [like, dislike] = HandulLike(
     post.reaction.type,
     post.reaction.numLike,
@@ -97,7 +96,7 @@ function CreateCtg(categories) {
 }
 
 function HandulLike(type, numlike, numdislike, islogin, postid) {
-  // console.log(postid);
+
   const likebtn = document.createElement("button");
   const dislikebtn = document.createElement("button");
   likebtn.className = "like";
@@ -113,6 +112,8 @@ function HandulLike(type, numlike, numdislike, islogin, postid) {
   const icondislike = document.createElement("span");
   icondlike.className = "material-symbols-outlined";
   icondislike.className = "material-symbols-outlined";
+  icondislike.style.fontSize = "14px";
+  icondlike.style.fontSize = "14px";
   icondislike.innerHTML = "thumb_down";
   icondlike.innerHTML = "thumb_up";
   likebtn.append(icondlike);
@@ -126,7 +127,6 @@ function HandulLike(type, numlike, numdislike, islogin, postid) {
   let close = true;
   likebtn.addEventListener("click", () => {
     if (!islogin) {
-      console.log(islogin);
       ClosePop(close);
       return;
     }
@@ -147,7 +147,6 @@ function HandulLike(type, numlike, numdislike, islogin, postid) {
   });
   dislikebtn.addEventListener("click", () => {
     if (!islogin) {
-      console.log(islogin);
       ClosePop(close);
       return;
     }
@@ -178,7 +177,7 @@ function HandulLike(type, numlike, numdislike, islogin, postid) {
 export function Inf(islogin) {
   let offset = 20;
   let lenghtpost;
-  window.addEventListener("scrollend", async () => {
+  window.addEventListener("scroll", async () => {
     let windowHight = window.innerHeight;
     let scrol = window.scrollY;
     if (scrol + windowHight > document.body.scrollHeight - 1000) {
@@ -188,7 +187,7 @@ export function Inf(islogin) {
       }
       lenghtpost = await FetchPost(offset, islogin);
       offset += 20;
-      console.log(offset);
+
     }
   });
 }
@@ -204,8 +203,28 @@ async function HandulPostCommant(islogin, postid) {
   const post = await res.json();
   const div = CreateDiv(post, islogin, true);
   postopop.append(div);
+  const commant = document.createElement("div");
+  commant.className = "postcommat";
+  commant.id = "postcommat";
+
   postopop.classList.remove("closePose");
   ClosePost(postopop);
+  const len = await Handulcomment(commant, postid, 0, islogin);
+  if (len == 0) {
+    commant.innerHTML = "no commant YET";
+    commant.style.height = "auto";
+  } else {
+    const showmore = document.createElement("span");
+    showmore.className = "showMore";
+    showmore.innerHTML = "show more";
+    let offset = 5;
+    showmore.addEventListener("click", () => {
+      Morecommate(showmore, offset, postid, islogin, commant);
+      offset += 5;
+    });
+    commant.append(showmore);
+  }
+  postopop.append(commant);
 }
 
 function ClosePost(postpop) {
@@ -214,4 +233,128 @@ function ClosePost(postpop) {
     postpop.innerHTML = "";
     postpop.classList.add("closePose");
   });
+}
+
+async function Handulcomment(div, postId, offset, islogin) {
+  const res = await fetch(`/api/commant?offset=${offset}&postid=${postId}`);
+  const commants = await res.json();
+  for (let commant of commants) {
+    const divcom = CreateCommate(commant, islogin);
+    div.prepend(divcom);
+  }
+  return commants.length;
+}
+
+function CreateCommate(commant, islogin) {
+  const div = document.createElement("div");
+  div.className = "commant_post";
+  const commantinfo = document.createElement("div");
+  commantinfo.className = "commantInfo";
+  const h1 = document.createElement("h1");
+  h1.className = "Username";
+  h1.innerText = commant.userName;
+  const date = document.createElement("div");
+  date.className = "date";
+  date.innerText = commant.date;
+  commantinfo.append(h1, date);
+  const contan = document.createElement("div");
+  contan.innerText = commant.contant;
+  div.append(commantinfo, contan);
+  const reaction = document.createElement("div");
+  reaction.className = "reaction";
+  const [like, dislike] = HandulLikeCommat(
+    commant.reaction.type,
+    commant.reaction.numLike,
+    commant.reaction.numDisLike,
+    islogin,
+    commant.id
+  );
+  reaction.append(like, dislike);
+  div.append(reaction);
+  return div;
+}
+
+function HandulLikeCommat(type, numlike, numdislike, islogin, commantid) {
+  // console.log(postid);
+  const likebtn = document.createElement("button");
+  const dislikebtn = document.createElement("button");
+  likebtn.className = "likecomate";
+  dislikebtn.className = "likecomate";
+  if (type === "likes") {
+    likebtn.classList.add(type);
+  } else if (type === "dislikes") {
+    dislikebtn.classList.add(type);
+  }
+
+  const icondlike = document.createElement("span");
+  const icondislike = document.createElement("span");
+  icondlike.className = "material-symbols-outlined";
+  icondislike.className = "material-symbols-outlined";
+  icondislike.style.fontSize = "14px";
+  icondlike.style.fontSize = "14px";
+  icondislike.innerHTML = "thumb_down";
+  icondlike.innerHTML = "thumb_up";
+  likebtn.append(icondlike);
+  dislikebtn.append(icondislike);
+  const likespan = document.createElement("span");
+  const dislikespan = document.createElement("span");
+  likespan.innerHTML = numlike;
+  dislikespan.innerHTML = numdislike;
+  likebtn.append(likespan);
+  dislikebtn.append(dislikespan);
+  let close = true;
+  likebtn.addEventListener("click", () => {
+    if (!islogin) {
+      ClosePop(close);
+      return;
+    }
+    if (likebtn.classList.length == 2) {
+      likebtn.classList.remove("likes");
+      numlike--;
+    } else {
+      if (dislikebtn.classList.length == 2) {
+        dislikebtn.classList.remove("dislikes");
+        numdislike--;
+      }
+      numlike++;
+      likebtn.classList.add("likes");
+    }
+    likespan.innerHTML = numlike;
+    dislikespan.innerHTML = numdislike;
+    fetch(`/api/commant/like?commateId=${commantid}&type=likes`, {
+      method: "POST",
+    });
+  });
+  dislikebtn.addEventListener("click", () => {
+    if (!islogin) {
+      ClosePop(close);
+      return;
+    }
+    if (dislikebtn.classList.length == 2) {
+      dislikebtn.classList.remove("dislikes");
+      numdislike--;
+    } else {
+      if (likebtn.classList.length == 2) {
+        likebtn.classList.remove("likes");
+        numlike--;
+      }
+      numdislike++;
+      dislikebtn.classList.add("dislikes");
+    }
+    likespan.innerHTML = numlike;
+    dislikespan.innerHTML = numdislike;
+    fetch(`/api/commant/like?commateId=${commantid}&type=dislikes`, {
+      method: "POST",
+    }).then((res) => {
+      // console.log(res);
+    });
+  });
+  return [likebtn, dislikebtn];
+}
+
+async function Morecommate(span, offset, postid, islogin, div) {
+  const len = await Handulcomment(div, postid, offset, islogin);
+  if (len == 0) {
+    span.remove();
+  }
 }

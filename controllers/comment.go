@@ -96,7 +96,7 @@ func (db *Date) AddCommat(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	commant := utils.Commant{}
-	exist := db.CheckPost(postid)
+	exist := db.CheckCommat(postid)
 	if exist != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "post not found"})

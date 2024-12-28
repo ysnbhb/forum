@@ -11,9 +11,6 @@ exists()
     console.error("An error occurred:", error);
   });
 
-// if (check) {
-//
-// }
 
 function confermetPas() {
   const password = document.getElementById("password");
