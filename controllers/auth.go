@@ -32,7 +32,7 @@ func (db *Date) GoogleAthud(w http.ResponseWriter, r *http.Request) {
 func (db *Date) GoogleCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
 	if code == "" {
-		http.Redirect(w, r, "/sign", http.StatusSeeOther)
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Found", "The page you are looking for is not available!", nil)
 		return
 	}
 	googleClientID := os.Getenv("GOOGLE_CLIENT_ID")
@@ -46,7 +46,7 @@ func (db *Date) GoogleCallbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := http.PostForm("https://oauth2.googleapis.com/token", data)
 	if err != nil || resp.StatusCode != http.StatusOK {
-		http.Error(w, "Failed to exchange token", http.StatusInternalServerError)
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Found", "The page you are looking for is not available!", nil)
 		return
 	}
 	defer resp.Body.Close()
@@ -60,7 +60,7 @@ func (db *Date) GoogleCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	req.Header.Set("Authorization", "Bearer "+tokenResp.AccessToken)
 	userResp, err := http.DefaultClient.Do(req)
 	if err != nil || userResp.StatusCode != http.StatusOK {
-		http.Redirect(w, r, "/sign", http.StatusSeeOther)
+		utils.ErrorHandler(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError), "sorry but there are Error in server try next time", nil)
 		return
 	}
 	defer userResp.Body.Close()
@@ -89,7 +89,7 @@ func (db *Date) GithubLoginHandler(w http.ResponseWriter, r *http.Request) {
 func (db *Date) GithubCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
 	if code == "" {
-		http.Redirect(w, r, "/sign", http.StatusSeeOther)
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Found", "The page you are looking for is not available!", nil)
 		return
 	}
 
@@ -103,7 +103,7 @@ func (db *Date) GithubCallbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := http.PostForm("https://github.com/login/oauth/access_token", data)
 	if err != nil || resp.StatusCode != http.StatusOK {
-		http.Redirect(w, r, "/sign", http.StatusSeeOther)
+		utils.ErrorHandler(w, http.StatusNotFound, "Page not Found", "The page you are looking for is not available!", nil)
 		return
 	}
 	defer resp.Body.Close()
@@ -117,7 +117,8 @@ func (db *Date) GithubCallbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	userResp, err := http.DefaultClient.Do(req)
 	if err != nil || userResp.StatusCode != http.StatusOK {
-		http.Redirect(w, r, "/sign", http.StatusSeeOther)
+
+		utils.ErrorHandler(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError), "sorry but there are Error in server try next time", nil)
 		return
 	}
 	defer userResp.Body.Close()
@@ -139,22 +140,34 @@ func (db *Date) InsertAuth(email string) error {
 func (db *Date) HandleAuth(email string, w http.ResponseWriter, r *http.Request) {
 	id, typeOflog := db.SelectAuth(email)
 	if id == -1 {
-		uid, _ := uuid.NewV4()
+		uid, err := uuid.NewV4()
+		if err != nil {
+			utils.ErrorHandler(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError), "sorry but there are Error in server try next time", nil)
+			return
+		}
 		query := `INSERT INTO noLog (email , token) VALUES(?, ?)`
-		db.DB.Exec(query, email, uid)
+		_, err = db.DB.Exec(query, email, uid)
+		if err != nil {
+			utils.ErrorHandler(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError), "sorry but there are Error in server try next time", nil)
+			return
+		}
 		http.SetCookie(w, &http.Cookie{
 			Name:   "auth",
 			Value:  uid.String(),
 			Path:   "/",
 			MaxAge: 60,
 		})
-		http.Redirect(w, r, "/auth/sigup", http.StatusSeeOther)
+		http.Redirect(w, r, "/auth/signup", http.StatusSeeOther)
 		return
 	}
 	if typeOflog == "sing" {
 		http.Redirect(w, r, "/auth/used", http.StatusSeeOther)
 	} else {
-		db.SetCookie(w, id)
+		err := db.SetCookie(w, id)
+		if err != nil {
+			utils.ErrorHandler(w, http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError), "sorry but there are Error in server try next time", nil)
+			return
+		}
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 }

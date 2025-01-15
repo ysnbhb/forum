@@ -1,0 +1,126 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Header Styling */
+
+header {
+  height: 62px;
+  box-shadow: -3px 6px 19px 2px #31393173;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  justify-content: st;
+  align-items: center;
+  background: linear-gradient(to right, #f7bcc6, #c5647594);
+}
+
+.img-div {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: start;
+}
+
+.img-div img {
+  height: 100%;
+}
+
+
+.contenr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.userName {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 21%);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.userName label {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 10px;
+  display: block;
+  font-weight: bold;
+}
+
+.userName input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.userName input[type="text"]:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.userName button.fetch {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.userName button.fetch:hover {
+  background-color: #0056b3;
+}
+
+.userName .error {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ff0000;
+  display: none; /
+}
+
+.userName .error.active {
+  display: block; 
+}
+
+@media (max-width: 600px) {
+  .userName {
+    padding: 15px 20px;
+  }
+
+  .userName label {
+    font-size: 16px;
+  }
+
+  .userName input[type="text"] {
+    font-size: 14px;
+  }
+
+  .userName button.fetch {
+    font-size: 14px;
+  }
+}

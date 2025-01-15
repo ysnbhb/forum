@@ -36,6 +36,9 @@ func main() {
 	mux.HandleFunc("/auth/google/callback", DB.GoogleCallbackHandler)
 	mux.HandleFunc("/auth/github", DB.GithubLoginHandler)
 	mux.HandleFunc("/auth/github/callback", DB.GithubCallbackHandler)
+	mux.HandleFunc("/auth/signup", server.AuthSing)
+	mux.HandleFunc("/auth/user/signup", DB.AuthName)
+
 	// api
 	mux.HandleFunc("/api/getCategorie", api.DB.GetCtg)
 	mux.HandleFunc("/api/posts", (DB.AllPost))
