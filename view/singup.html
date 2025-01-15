@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+    <link rel="stylesheet" href="../frontend/style/sing.css" />
+    <title>sing Up</title>
+    <link rel="icon" href="../frontend/image/icon.png" />
+  </head>
+
+  <body>
+    <!-- <header id="header"></header> -->
+    <div class="bodyContent">
+      <div class="contenr">
+        <div class="div-sing">User Sing Up</div>
+        <div class="min-contenr">
+          <form class="form-post">
+            <div class="contenr-input">
+              <div class="input-div">
+                <div>
+                  <label class="lable-clase">user name</label>
+                  <label id="user_label"></label>
+                </div>
+                <input
+                  type="text"
+                  placeholder="user name"
+                  class="input-clas"
+                  id="user_name"
+                />
+              </div>
+              <div class="input-div">
+                <div>
+                  <label class="lable-clase">email</label>
+                  <label id="email_label"></label>
+                </div>
+                <input
+                  type="email"
+                  placeholder="email"
+                  class="input-clas"
+                  id="email"
+                  required
+                />
+              </div>
+              <div class="input-div">
+                <div class="lable-clase">
+                  <label>password</label>
+                  <label id="passwd_lable"></label>
+                </div>
+
+                <input
+                  type="password"
+                  placeholder="password"
+                  id="password"
+                  class="input-clas"
+                />
+                <span
+                  class="icon-style material-symbols-outlined"
+                  id="changTYpe"
+                >
+                  visibility
+                </span>
+              </div>
+              <div class="input-div">
+                <div class="lable-clase">
+                  <label>confermet password</label>
+                  <label id="confermet_lable"></label>
+                </div>
+
+                <input
+                  type="password"
+                  placeholder="confermet password"
+                  id="confpassword"
+                  class="input-clas"
+                />
+                <span
+                  class="icon-style material-symbols-outlined"
+                  id="changContype"
+                >
+                  visibility
+                </span>
+              </div>
+              <div class="buttom-div">
+                <button class="button-singup" id="sing-up">Sing Up</button>
+              </div>
+            </div>
+          </form>
+          <div class="error_message" id="error_message"></div>
+        </div>
+        <div class="sing">
+          do you have account?
+          <a href="/singin" style="margin-left: 2px; text-decoration: none">
+            sing in.</a
+          >
+        </div>
+        <div class="google">
+          <div class="icon" id="google">
+            <img src="../frontend/image/google.jpg" alt="" />
+          </div>
+          <div class="icon" id="github">
+            <img src="../frontend/image/github.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../frontend/js/script.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/validator@13.9.0/validator.min.js"></script>
+  </body>
+</html>

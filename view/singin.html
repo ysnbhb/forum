@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../frontend/style/sing.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    />
+    <link rel="icon" href="../frontend/image/icon.png" />
+    <title>sing in</title>
+  </head>
+
+  <body>
+    <div class="bodyContent">
+      <div class="contenr">
+        <div class="min-contenr">
+          <div class="div-sing">User Sing In</div>
+          <form class="form-post">
+            <div class="contenr-input">
+              <div class="input-div">
+                <div>
+                  <label class="lable-clase">user name or email</label>
+                </div>
+                <input
+                  type="text"
+                  placeholder="userName or email"
+                  class="input-clas"
+                  id="userInf"
+                />
+              </div>
+              <div class="input-div">
+                <div>
+                  <label class="lable-clase">password</label>
+                </div>
+                <input
+                  type="password"
+                  placeholder="password"
+                  class="input-clas"
+                  id="password"
+                />
+                <span
+                  class="icon-style material-symbols-outlined"
+                  id="changTYpe"
+                >
+                  visibility
+                </span>
+              </div>
+            </div>
+            <div class="buttom-div" style="margin-top: 20px">
+              <button class="button-singup" id="sing-in">Sing In</button>
+            </div>
+          </form>
+          <div class="error_message" id="error_message"></div>
+        </div>
+        <div class="sing">
+          you don't have account?
+          <a href="/singup" style="margin-left: 2px; text-decoration: none">
+            sing in.</a
+          >
+        </div>
+        <div class="google">
+          <div class="icon" id="google">
+            <img src="../frontend/image/google.jpg" alt="" />
+          </div>
+          <div class="icon" id="github">
+            <img src="../frontend/image/github.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="../frontend/js/singin.js"></script>
+  </body>
+</html>

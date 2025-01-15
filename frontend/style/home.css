@@ -1,0 +1,513 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #2b7ac938;
+}
+
+/* .content {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2b7ac938;
+} */
+
+/* start of not sign style */
+
+.singpopup {
+  width: 25%;
+  height: 25%;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.4s ease;
+}
+.close {
+  position: absolute;
+  top: 1%;
+  left: 93%;
+  border: 0;
+  margin: 0;
+  background: transparent;
+}
+
+.close:hover {
+  cursor: pointer;
+}
+
+.sing-in,
+.sing-up {
+  width: 30%;
+  height: 30%;
+  margin-top: 30px;
+}
+
+.sing {
+  position: absolute;
+  top: 7%;
+}
+
+/* end of style of user not sign */
+
+/* start of style header and popup of header */
+
+.popup {
+  background: #cdcdcd96;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 9px 0px #0000009c;
+  border-radius: 20px;
+}
+
+.link-sing {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-link {
+  border: 0;
+  box-shadow: 0px 2px 10px 3px #00000073;
+  border-radius: 14px;
+  margin-top: 50px;
+  height: 50px;
+  width: 100%;
+}
+
+.btn-link:hover {
+  cursor: pointer;
+}
+
+.closepop {
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.4s ease;
+  /* position: absolute; */
+}
+
+.link {
+  width: 14%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.userName {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.userName:hover {
+  cursor: pointer;
+}
+
+.classic a {
+  text-decoration: none;
+  font-size: larger;
+  color: rgb(46, 39, 26);
+  display: flex;
+  justify-content: space-between;
+  width: 60%;
+}
+
+.PrLog {
+  position: absolute;
+  right: 11px;
+  top: 9%;
+  width: 10%;
+  height: 100px;
+  box-shadow: -3px 6px 19px 2px #31393173;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  transform: translate(-10%, -210%);
+  transition: transform 0.2s ease;
+}
+
+.classic {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.icon {
+  font-weight: 500;
+  font-size: 39px;
+  line-height: 01;
+  color: #650707ba;
+}
+
+.showPop {
+  transform: translate(-10%, -10%) scale(1);
+  transition: transform 0.1s ease;
+
+  visibility: visible;
+}
+
+header {
+  height: 62px;
+  box-shadow: -3px 6px 19px 2px #31393173;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  justify-content: space-around;
+  align-items: center;
+  background: linear-gradient(to right, #f7bcc6, #c5647594);
+}
+
+.img-div {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: start;
+}
+
+.img-div img {
+  height: 100%;
+}
+
+.profile {
+  margin-top: 9px;
+  font-weight: bolder;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.nolog_bnt:hover {
+  cursor: pointer;
+}
+
+.nolog_bnt {
+  border-radius: 9px;
+  border: 1px solid;
+  height: 42px;
+  width: 154%;
+  background: linear-gradient(to right, #7b5c9d, #31758f);
+  color: #fdff72;
+}
+
+.nolog_link {
+  width: 24%;
+  display: flex;
+  justify-content: end;
+  gap: 40px;
+
+  align-items: center;
+}
+
+.div-icon {
+  position: fixed;
+  display: flex;
+  bottom: 10px;
+  right: 2%;
+  background: #f7bcc6;
+  width: 56px;
+  height: 56px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  box-shadow: -3px 6px 19px 2px #31393173;
+}
+
+.div-icon:hover {
+  cursor: pointer;
+}
+/* end of style header and popup of header */
+.interErro {
+  position: fixed;
+  right: 5%;
+  top: 10%;
+  height: 26px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  border-radius: 6px;
+}
+
+/*
+  style of post popup 
+ */
+
+.postpop {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+label {
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+#title,
+#contant {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #45434378;
+  border-radius: 4px;
+}
+
+#img {
+  display: none;
+}
+
+#submit {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#submit:hover {
+  background-color: #0056b3;
+}
+
+.upload-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  border: 2px dashed #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 3%;
+  right: 30%;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 6%;
+  height: 5%;
+  cursor: pointer;
+  text-align: center;
+}
+
+.upload-icon span {
+  color: #007bff;
+  font-size: 50px;
+}
+
+.checkbox {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  width: 90%;
+  margin-bottom: 10px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.checkbox-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  font-size: 14px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+
+.checkbox-container input[type="checkbox"] {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+
+.checkbox-container input[type="checkbox"] + label {
+  position: relative;
+  cursor: pointer;
+  padding-left: 30px;
+}
+
+.checkbox-container input[type="checkbox"]:checked + label::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 16px;
+  color: green;
+}
+
+.checkbox-container label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkbox-container:hover label::before {
+  border-color: #4caf50;
+}
+
+.checkbox-container input[type="checkbox"]:active + label::before {
+  background-color: #e0e0e0;
+}
+
+@media (max-width: 600px) {
+  .postpop {
+    width: 95%;
+    padding: 15px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  #title,
+  #contant {
+    font-size: 14px;
+  }
+
+  #submit {
+    font-size: 14px;
+    padding: 8px;
+  }
+  /* .upload-icon span {
+    font-size: 20px;
+  } */
+}
+/* end of style of popup */
+
+/* @ madia for heder and log out popup  */
+@media (max-width: 1200px) {
+  .PrLog {
+    width: 18%;
+  }
+  header {
+    justify-content: space-around;
+  }
+}
+
+@media (max-height: 800px) {
+  .PrLog {
+    width: 25%;
+  }
+  .link {
+    margin-right: 39px;
+    display: inline;
+  }
+  .nolog_link {
+    width: 40%;
+  }
+}
+
+/* @media (max-width: 800px) {
+  .link {
+    display: inline;
+  }
+} */
+
+@media (max-width: 580px) {
+  header {
+    justify-content: space-around;
+  }
+  .img-div {
+    margin-left: -2px;
+  }
+  .PrLog {
+    width: 38%;
+  }
+  .link {
+    display: inline;
+  }
+  .nolog_link {
+    margin-right: 26px;
+    width: 45%;
+    justify-content: space-around;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .PrLog {
+    width: 25%;
+  }
+  .classic {
+    justify-content: center;
+  }
+  .classic a {
+    width: auto;
+  }
+  .classic a p {
+    display: none;
+  }
+  .link {
+    display: inline;
+  }
+  .delete-btn {
+    right: 27%;
+    height: 4%;
+  }
+}
+
+/* end of syle of heder and log out popup */
+
+#error {
+  color: red;
+  text-align: center;
+  height: 0;
+  transition: all 0.3s;
+}
+
+.error-visible {
+  height: auto;
+  visibility: visible;
+}
